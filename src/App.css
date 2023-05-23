@@ -2,10 +2,11 @@ body {
   margin: 0;
   padding: 0;
   font-family: Arial, sans-serif;
+  background-color: #2a282b;
 }
 
 header {
-  background-color: #f44336;
+  background-color: #d53b47;
   padding: 20px;
   color: #fff;
   text-align: center;
@@ -20,13 +21,14 @@ header {
 .row {
   width: 100%;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
+  margin : 10px 0px 0px 10px;
 }
 
 .pokemon {
-  width: 20%;
+  width: 19%;
   text-align: center;
-  margin: 10px;
+  margin-right: 10px;
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 8px;
@@ -35,8 +37,8 @@ header {
 }
 
 .pokemon img {
-  width: 100px;
-  height: 100px;
+  width: 80px;
+  height: 80px;
   margin-bottom: 10px;
 }
 
@@ -44,16 +46,32 @@ header {
   margin: 0;
 }
 
+@media screen and (max-width: 1200px) {
+  .row {
+    width: 90%;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .pokemon {
+    width: 23%;
+  }
+}
+
 @media screen and (max-width: 768px) {
+  .row {
+    flex-wrap: wrap;
+    
+  }
+
   .pokemon {
     width: 25%;
+    margin:5px 10px 5px 0px;
   }
 }
 
 @media screen and (max-width: 480px) {
   .pokemon {
-    width: 50%;
+    width: 100%;
   }
 }
-
-

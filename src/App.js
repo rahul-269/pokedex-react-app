@@ -10,13 +10,15 @@ const App = () => {
       .then((response) => response.json())
       .then((data) => setPokemonList(data.results))
       .catch((error) => console.log(error));
+       
   }, []);
 
   return (
     <div>
       <header>
-        <h1>Pokedex</h1>
+        <h1 className="header-title">Pokedex</h1>
       </header>
+
 
       <main>
         <div className="pokedex-list">
