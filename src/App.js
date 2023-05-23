@@ -1,25 +1,45 @@
-import logo from './logo.svg';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 
-function App() {
+const App = () => {
+  const [pokemonList, setPokemonList] = useState([]);
+
+  useEffect(() => {
+    // Fetch the list of Pokemon from the PokeAPI
+    fetch('https://pokeapi.co/api/v2/pokemon')
+      .then((response) => response.json())
+      .then((data) => setPokemonList(data.results))
+      .catch((error) => console.log(error));
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+    <div>
+      <header>
+        <h1>Pokedex</h1>
       </header>
+
+      <main>
+        <div className="pokedex-list">
+          {Array.from({ length: Math.ceil(pokemonList.length / 5) }, (_, rowIndex) => (
+            <div key={rowIndex} className="row">
+              {pokemonList.slice(rowIndex * 5, rowIndex * 5 + 5).map((pokemon) => (
+                <div key={pokemon.name} className="pokemon">
+                  <img
+                    src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.url.split('/')[6]}.png`}
+                    alt={pokemon.name}
+                  />
+                  <p>{pokemon.name}</p>
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
+      </main>
     </div>
   );
-}
+};
 
 export default App;
+
+
+
