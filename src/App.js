@@ -29,6 +29,7 @@ const App = () => {
         image: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${data.id}.png`,
         name: data.name,
         type: data.types[0].type.name,
+        id: data.id,
         height: data.height,
         weight: data.weight,
         stats: data.stats.map((stat) => ({

@@ -51,8 +51,12 @@ header {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: #f9f9f9;
-  border-radius: 8px;
+  background-color: #d53b47;
+  border: 5px solid #212121;
+  border-top-right-radius: 10%;
+  border-bottom-right-radius: 10%;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
   padding: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   max-width: 400px;
@@ -64,32 +68,68 @@ header {
 
 .popup-close {
   position: absolute;
-  top: 10px;
+  top: 230px;
   right: 10px;
   cursor: pointer;
+  background-color:#fff;
+  color: #212121;
+  height:17px;
+  width:35px;
+  border-radius: 10%;
+  font-size: 15px;
+  padding-left:2px;
 }
 
 .popup-content {
   display: flex;
   flex-direction: column;
   align-items: center;
+  border: 5px solid #212121;
+  border-top-right-radius: 10%;
+  border-bottom-right-radius: 10%;
+  padding: 10px 0px;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
 }
 
 .popup-image {
   width: 200px;
   height: 200px;
-  margin-bottom: 20px;
+  background-color: #fff;
+  border-radius: 10%;
+  
+}
+
+.popup-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #dcdcdc;
+  padding: 10px;
+  border-radius: 5px;
+  border: 5px solid #212121;
+}
+
+.popup-type {
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-weight: bold;
+  margin-left: 10px;
+}
+
+.popup-body {
+  background-color: #fff;
+  padding: 2px;
 }
 
 .popup-info {
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
-  width: 100%;
-  margin-bottom: 10px;
-}
-
-.popup-info span {
-  color: #555;
+  align-items: center;
+  height: 125px;
+  width: 135px;
+  font-weight: 600;
 }
 
 .popup-stats {
@@ -111,6 +151,96 @@ header {
 
 .popup-stats-item span {
   color: #555;
+}
+
+.popup-type.bug {
+  background-color: #92bc2c;
+  color: #fff;
+}
+
+.popup-type.dark {
+  background-color: #595761;
+  color: #fff;
+}
+
+.popup-type.dragon {
+  background-color: #0c69c8;
+  color: #fff;
+}
+
+.popup-type.electric {
+  background-color: #f2d94e;
+  color: #000;
+}
+
+.popup-type.fairy {
+  background-color: #ee90e6;
+  color: #000;
+}
+
+.popup-type.fighting {
+  background-color: #d3425f;
+  color: #fff;
+}
+
+.popup-type.fire {
+  background-color: #ff9c54;
+  color: #fff;
+}
+
+.popup-type.flying {
+  background-color: #a1bbec;
+  color: #000;
+}
+
+.popup-type.ghost {
+  background-color: #5f6dbc;
+  color: #fff;
+}
+
+.popup-type.grass {
+  background-color: #5fbd58;
+  color: #000;
+}
+
+.popup-type.ground {
+  background-color: #da7c4d;
+  color: #fff;
+}
+
+.popup-type.ice {
+  background-color: #75d0c1;
+  color: #000;
+}
+
+.popup-type.normal {
+  background-color: #a0a29f;
+  color: #fff;
+}
+
+.popup-type.poison {
+  background-color: #b763cf;
+  color: #fff;
+}
+
+.popup-type.psychic {
+  background-color: #fa8581;
+  color: #000;
+}
+
+.popup-type.rock {
+  background-color: #c9bb8a;
+  color: #fff;
+}
+
+.popup-type.steel {
+  background-color: #5695a3;
+  color: #fff;
+}
+
+.popup-type.water {
+  background-color: #539ddf;
+  color: #fff;
 }
 
 @media screen and (max-width: 1200px) {
