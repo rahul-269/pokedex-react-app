@@ -2,7 +2,22 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const Popup = ({ pokemon, onClose }) => {
-  const { image, name, type, id, height, weight, stats } = pokemon;
+  const { image, name,length, type, id, height, weight, stats } = pokemon;
+
+  const bothType = () => {
+    if(length===2)
+    {
+      const type1 = type[0].type.name.toUpperCase();
+      const type2 = type[1].type.name.toUpperCase();
+      return <><span className={`popup-type ${type[0].type.name}`}>{type1}</span><span className={`popup-type ${type[1].type.name}`}>{type2}</span></>;
+    }
+    else
+    {
+      const type1 = type[0].type.name.toUpperCase();
+      return <><span className={`popup-type ${type[0].type.name}`}>{type1}</span></>;
+
+    }
+  };
 
   return (
     <div className="popup">
@@ -15,8 +30,8 @@ const Popup = ({ pokemon, onClose }) => {
           
           <div className="popup-info">
             <span>#{id}</span>
-            <span className={`popup-type ${type.toLowerCase()}`}>{type}</span>
-            <span className={`popup-type ${type.toLowerCase()}`}>{type}</span>
+            <>{bothType()}</>
+            
             <span>Height: {height / 10} m</span>
             <span>Weight: {weight / 10} kg</span>
           </div>
@@ -42,7 +57,8 @@ Popup.propTypes = {
   pokemon: PropTypes.shape({
     image: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
-    type: PropTypes.string.isRequired,
+    length: PropTypes.number.isRequired,
+    type: PropTypes.array.isRequired,
     id: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired,
     weight: PropTypes.number.isRequired,

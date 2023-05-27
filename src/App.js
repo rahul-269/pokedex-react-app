@@ -28,7 +28,8 @@ const App = () => {
       const selectedPokemonData = {
         image: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${data.id}.png`,
         name: data.name,
-        type: data.types[0].type.name,
+        length: data.types.length,
+        type: data.types,
         id: data.id,
         height: data.height,
         weight: data.weight,
