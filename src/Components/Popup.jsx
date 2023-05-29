@@ -34,7 +34,6 @@ const Popup = ({ pokemon, onClose }) => {
             
             <span>Height: {height / 10} m</span>
             <span>Weight: {weight / 10} kg</span>
-            <p>Hello wor</p>
           </div>
 
         </div>
