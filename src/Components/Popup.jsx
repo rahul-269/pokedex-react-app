@@ -19,6 +19,16 @@ const Popup = ({ pokemon, onClose }) => {
     }
   };
 
+  const ucaseFirst = (pkname) => {
+    return (
+      pkname.charAt(0).toUpperCase() + pkname.slice(1).toLowerCase()
+    );
+  };
+
+  const basetotal = stats.reduce((a,b) => {
+    return a + b.value;
+  },0);
+
   return (
     <div className="popup">
       <div className="popup-close" onClick={onClose}>
@@ -30,23 +40,28 @@ const Popup = ({ pokemon, onClose }) => {
           
           <div className="popup-info">
             <span>#{id}</span>
+            <span>{ucaseFirst(name)}</span>
             <>{bothType()}</>
-            
             <span>Height: {height / 10} m</span>
             <span>Weight: {weight / 10} kg</span>
           </div>
-
         </div>
+
         <div className="popup-body">
           <div className="popup-stats">
             <div className="popup-stats-header">Base Stats</div>
             {stats.map((stat) => (
               <div key={stat.name} className="popup-stats-item">
-                <span>{stat.name}</span>
+                <span>{ucaseFirst(stat.name)}</span>
                 <span>{stat.value}</span>
               </div>
             ))}
+            <div className="popup-stats-item">
+              <span>Total</span>
+              <span>{basetotal}</span>
+            </div>
           </div>
+          <span>hello</span>
         </div>
       </div>
     </div>
