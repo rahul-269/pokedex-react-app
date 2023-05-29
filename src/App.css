@@ -2,14 +2,22 @@ body {
   margin: 0;
   padding: 0;
   font-family: Arial, sans-serif;
+  border: 20px solid #d53b47;
   background-color: #2a282b;
 }
 
 header {
   background-color: #d53b47;
-  padding: 20px;
+  padding: 10px;
   color: #fff;
   text-align: center;
+  border: 10px solid #2a282b;
+  border-bottom: 0px;
+}
+
+.main{
+  background-color: #2a282b;
+  padding-bottom: 10px;
 }
 
 .pokedex-list {

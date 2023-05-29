@@ -20,6 +20,12 @@ const App = () => {
     }
   };
 
+  const capitalizeFirst = (pname) => {
+    return (
+      pname.charAt(0).toUpperCase() + pname.slice(1).toLowerCase()
+    );
+  };
+
   const handlePokemonClick = async (pokemon) => {
     try {
       const response = await fetch(pokemon.url);
@@ -51,10 +57,10 @@ const App = () => {
   return (
     <div>
       <header>
-        <h1 className="header-title">Pokedex</h1>
+        <h1 className="header-title">POKEDEX</h1>
       </header>
 
-      <main>
+      <main className="main">
         <div className="pokedex-list">
           {Array.from({ length: Math.ceil(pokemonList.length / 5) }, (_, rowIndex) => (
             <div key={rowIndex} className="row">
@@ -68,7 +74,7 @@ const App = () => {
                     src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.url.split('/')[6]}.png`}
                     alt={pokemon.name}
                   />
-                  <p>{pokemon.name}</p>
+                  <p>{capitalizeFirst(pokemon.name)}</p>
                 </div>
               ))}
             </div>
