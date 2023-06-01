@@ -72,6 +72,7 @@ header {
   max-height: 90vh;
   overflow-y: auto;
   z-index: 1000;
+  
 }
 
 .popup-close {
@@ -140,6 +141,41 @@ header {
   border-radius: 5px;
   padding:10px;
   background-color: #dcdcdc;
+}
+
+.pop-end-buttons{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.popup-prev-button,.popup-next-button{
+  cursor: pointer;
+  background-color:#212121;
+  color: #fff;
+  padding:10px;
+  height:15px;
+  width:30px;
+  font-size: 12px;
+  text-align: center;
+  border-radius: 10%;
+  border: 2px solid #dcdcdc;
+  font-weight: 400;
+}
+
+.popup-prev-button:hover,.popup-next-button:hover{
+  color: #c6e6e4;
+}
+
+.popup-body-info{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  height: 145px;
+  width: 145px;
+  font-weight: 600;
+  font-size: 13px;
 }
 
 .popup-info {

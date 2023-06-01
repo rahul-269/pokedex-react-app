@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import Popup from './Components/Popup';
+import GetPokemon from './Components/GetPokemon';
 
 const App = () => {
+  
   const [pokemonList, setPokemonList] = useState([]);
   const [selectedPokemon, setSelectedPokemon] = useState(null);
 
   useEffect(() => {
-    fetchPokemonList();
+      fetchPokemonList();
   }, []);
 
   const fetchPokemonList = async () => {
@@ -26,9 +28,9 @@ const App = () => {
     );
   };
 
-  const handlePokemonClick = async (pokemon) => {
+  const handlePokemonClick = async (urls) => {
     try {
-      const response = await fetch(pokemon.url);
+      /*const response = await fetch(pokemon.url);
       const data = await response.json();
       console.log(data);
       const selectedPokemonData = {
@@ -36,6 +38,7 @@ const App = () => {
         name: data.name,
         length: data.types.length,
         type: data.types,
+        abilities: data.abilities,
         id: data.id,
         height: data.height,
         weight: data.weight,
@@ -43,8 +46,9 @@ const App = () => {
           name: stat.stat.name,
           value: stat.base_stat,
         })),
-      };
-      setSelectedPokemon(selectedPokemonData);
+      };*/
+      const selectedPokemonData = await GetPokemon(urls); 
+      setSelectedPokemon(selectedPokemonData.selectedPokemonData);
     } catch (error) {
       console.log(error);
     }
@@ -68,7 +72,7 @@ const App = () => {
                 <div
                   key={pokemon.name}
                   className="pokemon"
-                  onClick={() => handlePokemonClick(pokemon)}
+                  onClick={() => handlePokemonClick(pokemon.url)}
                 >
                   <img
                     src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.url.split('/')[6]}.png`}

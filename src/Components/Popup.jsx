@@ -1,10 +1,33 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import GetPokemon from './GetPokemon';
 
 const Popup = ({ pokemon, onClose }) => {
-  const { image, name,length, type, id, height, weight, stats } = pokemon;
+  
+  const [pokeman,setPokeman] = useState(pokemon);
+  const { image, name,length, type, abilities, id, height, weight, stats } = pokeman;
+  const [purl,setPurl] = useState(`https://pokeapi.co/api/v2/pokemon/${id}/`);
+ 
+  console.log(purl);
+  
+  const nextPokemon = () => {
+    console.log('clicked next');
+    setPurl(`https://pokeapi.co/api/v2/pokemon/${id+1}/`);
+    }
+    
+    useEffect(()=>{
+      
+        const fetchpkmn = async() => {
+          const pokemons = await GetPokemon(purl);
+          console.log(pokemons.selectedPokemonData);
+          setPokeman(pokemons.selectedPokemonData);
+        }
+        fetchpkmn()
+    },[purl]) 
+    
+  
 
-  const bothType = () => {
+  const bothType = (type) => {
     if(length===2)
     {
       const type1 = type[0].type.name.toUpperCase();
@@ -25,6 +48,34 @@ const Popup = ({ pokemon, onClose }) => {
     );
   };
 
+  const allAbilities = (abilities) => {
+    if(abilities.length===1)
+    {
+      const ability1 = abilities[0].ability.name;
+      return <><span>Ability: {ucaseFirst(ability1)}</span></>
+    }
+    else if(abilities.length===2)
+    {
+      const ability1 = abilities[0].ability.name;
+      const hiddenability = abilities[1].ability.name;
+      return <><span>Abilities</span>
+               <span>Abi-1: {ucaseFirst(ability1)}</span>
+               <span>H-Abi: {ucaseFirst(hiddenability)}</span>
+             </>
+    }
+    else
+    {
+      const ability1 = abilities[0].ability.name;
+      const ability2 = abilities[1].ability.name;
+      const hiddenability = abilities[2].ability.name;
+      return <><span>Abilities</span>
+               <span>Abi-1: {ucaseFirst(ability1)}</span>
+               <span>Abi-2: {ucaseFirst(ability2)}</span>
+               <span>H-Abi: {ucaseFirst(hiddenability)}</span>
+             </>
+    }
+  };
+
   const basetotal = stats.reduce((a,b) => {
     return a + b.value;
   },0);
@@ -41,7 +92,7 @@ const Popup = ({ pokemon, onClose }) => {
           <div className="popup-info">
             <span>#{id}</span>
             <span>{ucaseFirst(name)}</span>
-            <>{bothType()}</>
+            <>{bothType(type)}</>
             <span>Height: {height / 10} m</span>
             <span>Weight: {weight / 10} kg</span>
           </div>
@@ -61,7 +112,17 @@ const Popup = ({ pokemon, onClose }) => {
               <span>{basetotal}</span>
             </div>
           </div>
-          <span>hello</span>
+          <div className="popup-body-info">
+          {allAbilities(abilities)}
+            <div className='pop-end-buttons'>
+              <div className="popup-prev-button">
+                PREV
+              </div>
+              <div className="popup-next-button" onClick={nextPokemon} >
+                NEXT
+              </div>  
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -74,6 +135,7 @@ Popup.propTypes = {
     name: PropTypes.string.isRequired,
     length: PropTypes.number.isRequired,
     type: PropTypes.array.isRequired,
+    abilities: PropTypes.array.isRequired,
     id: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired,
     weight: PropTypes.number.isRequired,
