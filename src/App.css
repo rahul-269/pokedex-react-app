@@ -4,6 +4,7 @@ body {
   font-family: Arial, sans-serif;
   border: 20px solid #d53b47;
   background-color: #2a282b;
+  cursor: url(./Cursor/rotom2.png),auto;
 }
 
 header {
@@ -41,7 +42,14 @@ header {
   border: 1px solid #ccc;
   border-radius: 8px;
   background-color: #f9f9f9;
-  cursor: pointer;
+  cursor: url(./Cursor/rotom1.png),auto;
+}
+
+.pokemon:hover{
+  scale: 1.025;
+  background-color: #2a282b;
+  color: white;
+  font-weight: 600;
 }
 
 .pokemon img {
