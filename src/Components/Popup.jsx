@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import GetPokemon from './GetPokemon';
+import GetAbility from './GetAbility';
 
 const Popup = ({ pokemon, onClose }) => {
   
@@ -13,7 +14,12 @@ const Popup = ({ pokemon, onClose }) => {
   const nextPokemon = () => {
     console.log('clicked next');
     setPurl(`https://pokeapi.co/api/v2/pokemon/${id+1}/`);
-    }
+  }
+
+  const prevPokemon = () => {
+    console.log('clicked prev');
+    setPurl(`https://pokeapi.co/api/v2/pokemon/${id-1}/`);
+  }
     
     useEffect(()=>{
       
@@ -68,8 +74,12 @@ const Popup = ({ pokemon, onClose }) => {
       const ability1 = abilities[0].ability.name;
       const ability2 = abilities[1].ability.name;
       const hiddenability = abilities[2].ability.name;
+      const abiurl = abilities[0].ability.url;
       return <><span>Abilities</span>
-               <span>Abi-1: {ucaseFirst(ability1)}</span>
+               <span>
+                Abi-1: {ucaseFirst(ability1)}
+               <GetAbility abiurl={abiurl}/>
+               </span>
                <span>Abi-2: {ucaseFirst(ability2)}</span>
                <span>H-Abi: {ucaseFirst(hiddenability)}</span>
              </>
@@ -115,7 +125,7 @@ const Popup = ({ pokemon, onClose }) => {
           <div className="popup-body-info">
           {allAbilities(abilities)}
             <div className='pop-end-buttons'>
-              <div className="popup-prev-button">
+              <div className="popup-prev-button" onClick={prevPokemon}>
                 PREV
               </div>
               <div className="popup-next-button" onClick={nextPokemon} >

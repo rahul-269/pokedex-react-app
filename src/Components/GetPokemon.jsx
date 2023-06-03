@@ -19,6 +19,7 @@ const GetPokemon = async(url) => {
         })),
       };
       return {selectedPokemonData};
+    
 };
 
 export default GetPokemon;
