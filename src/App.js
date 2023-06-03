@@ -49,6 +49,7 @@ const App = () => {
       };*/
       const selectedPokemonData = await GetPokemon(urls); 
       setSelectedPokemon(selectedPokemonData.selectedPokemonData);
+      document.documentElement.style.setProperty('pointer-events', `none`);
     } catch (error) {
       console.log(error);
     }
@@ -56,6 +57,7 @@ const App = () => {
 
   const handleClosePopup = () => {
     setSelectedPokemon(null);
+    document.documentElement.style.setProperty('pointer-events', `auto`);
   };
 
   return (
