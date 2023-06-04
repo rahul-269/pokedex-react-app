@@ -151,13 +151,13 @@ header {
   background-color: #dcdcdc;
 }
 
-.pop-end-buttons{
+.pop-end-buttons,.toggle-buttons{
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.popup-prev-button,.popup-next-button{
+.popup-prev-button,.popup-next-button,.stats-button,.abilities-button{
   cursor: pointer;
   background-color:#212121;
   color: #fff;
@@ -178,10 +178,10 @@ header {
 .popup-body-info{
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  height: 180px;
-  width: 145px;
+  height: 204px;
+  width: 180px;
   font-weight: 600;
   font-size: 13px;
 }

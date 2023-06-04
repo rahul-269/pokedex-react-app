@@ -8,6 +8,9 @@ const Popup = ({ pokemon, onClose }) => {
   const [pokeman,setPokeman] = useState(pokemon);
   const { image, name,length, type, abilities, id, height, weight, stats } = pokeman;
   const [purl,setPurl] = useState(`https://pokeapi.co/api/v2/pokemon/${id}/`);
+  const [selected, setSelected] = useState(0);
+  
+
  
   console.log(purl);
   
@@ -130,7 +133,10 @@ const Popup = ({ pokemon, onClose }) => {
         </div>
 
         <div className="popup-body">
-          <div className="popup-stats">
+          <div>
+          
+
+          {(selected === 0) && <div className="popup-stats">
             <div className="popup-stats-header">Base Stats</div>
             {stats.map((stat) => (
               <div key={stat.name} className="popup-stats-item">
@@ -142,18 +148,31 @@ const Popup = ({ pokemon, onClose }) => {
               <span>Total</span>
               <span>{basetotal}</span>
             </div>
-          </div>
-          <div className="popup-body-info">
+          </div>}
+
+          {(selected === 1) && <div className="popup-body-info">
           {allAbilities(abilities)}
-            <div className='pop-end-buttons'>
+            
+          </div>}
+
+        </div>
+
+        <div>
+        <div className='toggle-buttons'> 
+                <div className='stats-button' onClick={() => setSelected(0)}> Stats </div>
+                <div className='abilities-button' onClick={() => setSelected(1)}> Abilities </div>     
+        </div>
+
+        <div className='pop-end-buttons'>
               <div className="popup-prev-button" onClick={prevPokemon}>
                 PREV
               </div>
               <div className="popup-next-button" onClick={nextPokemon} >
                 NEXT
               </div>  
-            </div>
-          </div>
+        </div>
+        </div>
+
         </div>
       </div>
     </div>
