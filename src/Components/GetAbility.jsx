@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 
 const GetAbility = (abiurl) => {
     console.log(abiurl);
-    const [abisum,setAbisum] = useState('');
+    const [abisum,setAbisum] = useState([]);
     useEffect(() => {
         const getabi = async() =>{
             try{
@@ -10,7 +10,7 @@ const GetAbility = (abiurl) => {
                 const response =  await fetch(abiurl.abiurl);
                 const data =  await response.json();
                 //console.log(data.flavor_text_entries[0].flavor_text);
-                setAbisum(data.flavor_text_entries[0].flavor_text);
+                setAbisum(data.flavor_text_entries);
             } catch (error) {
                 console.log(error);
               }
@@ -23,9 +23,21 @@ const GetAbility = (abiurl) => {
     //const  abisummary = getabi();
     //console.log(abisummary);
     //const summary = abisummary.flavor_text_entries[0].flavor_text;
+
+    /*const searchSummary = (summarize) => {
+        if(summarize.language.name === 'en')
+        {   
+            return <div>{summarize.flavor_text}</div>;
+        }
+    }*/
+
+    const filterabi = abisum.filter((summary) => {
+        return summary.language.name==='en';
+    });
+    console.log(filterabi);
   return (
     <>
-    <div>{abisum}</div>
+    <div>{filterabi[0]?.flavor_text}</div>
     </>
   );
 };

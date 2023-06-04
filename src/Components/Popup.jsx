@@ -58,15 +58,28 @@ const Popup = ({ pokemon, onClose }) => {
     if(abilities.length===1)
     {
       const ability1 = abilities[0].ability.name;
-      return <><span>Ability: {ucaseFirst(ability1)}</span></>
+      const abiurl1 = abilities[0].ability.url;
+      return <><span>Abilities</span>
+               <span>
+                Ability: {ucaseFirst(ability1)}
+                <GetAbility abiurl={abiurl1}/>
+               </span></>
     }
     else if(abilities.length===2)
     {
       const ability1 = abilities[0].ability.name;
       const hiddenability = abilities[1].ability.name;
+      const abiurl1 = abilities[0].ability.url;
+      const abiurl2 = abilities[1].ability.url;
       return <><span>Abilities</span>
-               <span>Abi-1: {ucaseFirst(ability1)}</span>
-               <span>H-Abi: {ucaseFirst(hiddenability)}</span>
+               <span>
+                Abi-1: {ucaseFirst(ability1)}
+                <GetAbility abiurl={abiurl1}/>
+                </span>
+               <span>
+                H-Abi: {ucaseFirst(hiddenability)}
+                <GetAbility abiurl={abiurl2}/>
+                </span>
              </>
     }
     else
