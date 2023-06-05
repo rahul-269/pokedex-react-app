@@ -10,6 +10,7 @@ const GetPokemon = async(url) => {
         length: data.types.length,
         type: data.types,
         abilities: data.abilities,
+        moves: data.moves,
         id: data.id,
         height: data.height,
         weight: data.weight,

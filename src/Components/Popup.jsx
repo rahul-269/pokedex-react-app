@@ -6,7 +6,7 @@ import GetAbility from './GetAbility';
 const Popup = ({ pokemon, onClose }) => {
   
   const [pokeman,setPokeman] = useState(pokemon);
-  const { image, name,length, type, abilities, id, height, weight, stats } = pokeman;
+  const { image, name,length, type, abilities, moves, id, height, weight, stats } = pokeman;
   const [purl,setPurl] = useState(`https://pokeapi.co/api/v2/pokemon/${id}/`);
   const [selected, setSelected] = useState(0);
   
@@ -156,12 +156,28 @@ const Popup = ({ pokemon, onClose }) => {
             
           </div>}
 
+          {(selected ===2) && <div className='popup-moves-info'>
+            <div className="moves-header">Learnable Moves</div>
+              {moves.map((move)=>(
+                <div key={move.move.name} className='popup-moves-item'>
+                  <span>
+                    {ucaseFirst(move.move.name)}
+                  </span>
+                </div>
+            
+              ))}</div>}
+
         </div>
 
         <div>
         <div className='toggle-buttons'> 
-                <div className='stats-button' onClick={() => setSelected(0)}> Stats </div>
-                <div className='abilities-button' onClick={() => setSelected(1)}> Abilities </div>     
+                <div className='stats-button' onClick={() => setSelected(0)}> STATS </div>
+                <div className='abilities-button' onClick={() => setSelected(1)}> ABILITIES </div>     
+        </div>
+
+        <div className='toggle-buttons'> 
+                <div className='stats-button' onClick={() => setSelected(2)}> MOVES </div>
+                <div className='abilities-button' onClick={() => setSelected(1)}> ABILITIES </div>     
         </div>
 
         <div className='pop-end-buttons'>
@@ -187,6 +203,7 @@ Popup.propTypes = {
     length: PropTypes.number.isRequired,
     type: PropTypes.array.isRequired,
     abilities: PropTypes.array.isRequired,
+    moves: PropTypes.array.isRequired,
     id: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired,
     weight: PropTypes.number.isRequired,
