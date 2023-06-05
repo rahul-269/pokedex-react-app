@@ -62,11 +62,12 @@ const Popup = ({ pokemon, onClose }) => {
     {
       const ability1 = abilities[0].ability.name;
       const abiurl1 = abilities[0].ability.url;
-      return <><span>Abilities</span>
-               <span>
-                Ability: {ucaseFirst(ability1)}
-                <GetAbility abiurl={abiurl1}/>
-               </span></>
+      return <><div className='ability-header'>Abilities</div>
+               <div className='ability-item-one'>
+                 <span className='ability-name'>{ucaseFirst(ability1)}</span>
+                 <span><GetAbility abiurl={abiurl1}/></span>
+               </div>
+             </>
     }
     else if(abilities.length===2)
     {
@@ -74,15 +75,15 @@ const Popup = ({ pokemon, onClose }) => {
       const hiddenability = abilities[1].ability.name;
       const abiurl1 = abilities[0].ability.url;
       const abiurl2 = abilities[1].ability.url;
-      return <><span>Abilities</span>
-               <span>
-                Abi-1: {ucaseFirst(ability1)}
-                <GetAbility abiurl={abiurl1}/>
-                </span>
-               <span>
-                H-Abi: {ucaseFirst(hiddenability)}
-                <GetAbility abiurl={abiurl2}/>
-                </span>
+      return <><div className='ability-header'>Abilities</div>
+               <div className='ability-item-two'>
+                <span className='ability-name'>{ucaseFirst(ability1)}</span>
+                <span><GetAbility abiurl={abiurl1}/></span>
+               </div>
+               <div className="ability-item-two">
+                <span className='ability-name'>{ucaseFirst(hiddenability)}</span>
+                <span><GetAbility abiurl={abiurl2}/></span>
+               </div>
              </>
     }
     else
@@ -93,19 +94,19 @@ const Popup = ({ pokemon, onClose }) => {
       const abiurl1 = abilities[0].ability.url;
       const abiurl2 = abilities[1].ability.url;
       const abiurl3 = abilities[2].ability.url;
-      return <><span>Abilities</span>
-               <span>
-                Abi-1: {ucaseFirst(ability1)}
-               <GetAbility abiurl={abiurl1}/>
-               </span>
-               <span>
-                Abi-2: {ucaseFirst(ability2)}
-                <GetAbility abiurl={abiurl2}/>
-                </span>
-               <span>
-                H-Abi: {ucaseFirst(hiddenability)}
-                <GetAbility abiurl={abiurl3}/>
-                </span>
+      return <><div className='ability-header'>Abilities</div>
+               <div className='ability-item'>
+                <span className='ability-name'>{ucaseFirst(ability1)}</span>
+                <span><GetAbility abiurl={abiurl1}/></span>
+               </div>
+               <div className="ability-item">
+                <span className='ability-name'>{ucaseFirst(ability2)}</span>
+                <span><GetAbility abiurl={abiurl2}/></span>
+               </div>
+               <div className="ability-item">
+                <span className='ability-name'>{ucaseFirst(hiddenability)}</span>
+                <span><GetAbility abiurl={abiurl3}/></span>
+               </div>
              </>
     }
   };

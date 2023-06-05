@@ -163,7 +163,7 @@ header {
   color: #fff;
   padding:10px;
   height:15px;
-  width:30px;
+  width:45px;
   font-size: 12px;
   text-align: center;
   border-radius: 10%;
@@ -176,14 +176,10 @@ header {
 }
 
 .popup-body-info{
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 204px;
-  width: 180px;
-  font-weight: 600;
-  font-size: 13px;
+  height: 198px;
+  width: 174px;
+  background-color: #dcdcdc;
+  border:3px solid #f9f9f9;
 }
 
 .popup-info {
@@ -203,7 +199,7 @@ header {
   border:3px solid #f9f9f9;
 }
 
-.popup-stats-header {
+.popup-stats-header,.ability-header {
   background-color: #d53b47;
   color: #f9f9f9;
   padding: 5px;
@@ -211,6 +207,52 @@ header {
   border: 2px solid #dcdcdc;
   font-size: 14px;
   font-weight: 600;
+}
+
+.ability-item{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  background-color: #f9f9f9;
+  padding:2px;
+  border: 2px solid #dcdcdc;
+  font-size: 12px;
+  color: #2c2b2b;
+  font-weight: 600;
+  height:48px;
+}
+
+.ability-item-one{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  background-color: #f9f9f9;
+  padding:2px;
+  border: 2px solid #dcdcdc;
+  font-size: 12px;
+  color: #2c2b2b;
+  font-weight: 600;
+  height:160px;
+}
+
+.ability-item-two{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  background-color: #f9f9f9;
+  padding:2px;
+  border: 2px solid #dcdcdc;
+  font-size: 12px;
+  color: #2c2b2b;
+  font-weight: 600;
+  height:76px;
+}
+
+.ability-name{
+  font-size: 14px;
 }
 
 .popup-stats-item {
