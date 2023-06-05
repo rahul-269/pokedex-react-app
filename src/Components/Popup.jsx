@@ -167,17 +167,21 @@ const Popup = ({ pokemon, onClose }) => {
             
               ))}</div>}
 
+          {(selected ===3) && <div className='popup-shiny-info'>
+            <img className='popup-image' key={id} src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/${id}.png`} alt={`shiny ${name}`} /></div>}
+
         </div>
 
-        <div>
+        <div className='dpad-buttons'>
         <div className='toggle-buttons'> 
+            <div className='button-group'>
                 <div className='stats-button' onClick={() => setSelected(0)}> STATS </div>
-                <div className='abilities-button' onClick={() => setSelected(1)}> ABILITIES </div>     
-        </div>
-
-        <div className='toggle-buttons'> 
-                <div className='stats-button' onClick={() => setSelected(2)}> MOVES </div>
-                <div className='abilities-button' onClick={() => setSelected(1)}> ABILITIES </div>     
+                <div className='moves-button' onClick={() => setSelected(2)}> MOVES </div>
+            </div>
+            <div className='button-group'>
+                <div className='abilities-button' onClick={() => setSelected(1)}> ABILITIES </div> 
+                <div className='shiny-button' onClick={() => setSelected(3)}> SHINY </div> 
+            </div>  
         </div>
 
         <div className='pop-end-buttons'>

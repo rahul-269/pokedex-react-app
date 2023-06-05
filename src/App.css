@@ -85,9 +85,9 @@ header {
 
 .popup-close {
   position: absolute;
-  top: 235px;
+  top: 220px;
   right: 0px;
-  cursor: pointer;
+  cursor: url(./Cursor/rotom1.png),auto;
   background-color:#212121;
   color: #fff;
   padding:15px;
@@ -151,27 +151,83 @@ header {
   background-color: #dcdcdc;
 }
 
-.pop-end-buttons,.toggle-buttons{
+.dpad-buttons{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  row-gap: 20px;
+}
+
+.button-group{
+  display: flex;
+  flex-direction: column;
+}
+
+.pop-end-buttons{
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.popup-prev-button,.popup-next-button,.stats-button,.abilities-button{
-  cursor: pointer;
+.toggle-buttons{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.popup-prev-button,.popup-next-button{
+  cursor: url(./Cursor/rotom1.png),auto;
   background-color:#212121;
   color: #fff;
   padding:10px;
   height:15px;
   width:45px;
-  font-size: 10px;
+  font-size: 12px;
   text-align: center;
   border-radius: 10%;
   border: 2px solid #dcdcdc;
   font-weight: 400;
 }
 
-.popup-prev-button:hover,.popup-next-button:hover,.stats-button:hover,.abilities-button:hover{
+.stats-button,.abilities-button,.moves-button,.shiny-button{
+  cursor: url(./Cursor/rotom1.png),auto;
+  background-color:#212121;
+  color: #fff;
+  padding:10px;
+  height:35px;
+  width:35px;
+  font-size: 9px;
+  text-align: center;
+  border-radius: 10%;
+  border: 2px solid #dcdcdc;
+  font-weight: 400;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.stats-button{
+  border-top-left-radius: 100%;
+  align-items: end;
+}
+
+.abilities-button{
+  border-top-right-radius: 100%;
+  align-items: end;
+}
+
+.moves-button{
+  border-bottom-left-radius: 100%;
+  align-items: start;
+}
+
+.shiny-button{
+  border-bottom-right-radius: 100%;
+  align-items: start;
+}
+
+
+.popup-prev-button:hover,.popup-next-button:hover,.stats-button:hover,.abilities-button:hover,.moves-button:hover,.shiny-button:hover{
   color: #c6e6e4;
 }
 
@@ -180,6 +236,16 @@ header {
   width: 174px;
   background-color: #dcdcdc;
   border:3px solid #f9f9f9;
+}
+
+.popup-shiny-info{
+  height: 198px;
+  width: 174px;
+  background-color: #dcdcdc;
+  border:3px solid transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .popup-moves-info{
