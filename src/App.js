@@ -69,16 +69,16 @@ const App = () => {
 
       <nav>
         <div className='regional-dex'>
-          <div className='dex-name' onClick={() => console.log('National Dex')}>National Dex</div>
+          <div className='dex-name' onClick={() => setListurl('https://pokeapi.co/api/v2/pokemon/?limit=1010')}>National Dex</div>
           <div className='dex-name' onClick={() => setListurl('https://pokeapi.co/api/v2/pokemon/?limit=151')}>Kanto</div>
-          <div className='dex-name'>Johto</div>
-          <div className='dex-name'>Hoenn</div>
-          <div className='dex-name'>Sinnoh</div>
-          <div className='dex-name'>Unova</div>
-          <div className='dex-name'>Kalos</div>
-          <div className='dex-name'>Alola</div>
-          <div className='dex-name'>Galar</div>
-          <div className='dex-name'>Paldea</div>
+          <div className='dex-name' onClick={() => setListurl('https://pokeapi.co/api/v2/pokemon/?limit=100&offset=151')}>Johto</div>
+          <div className='dex-name' onClick={() => setListurl('https://pokeapi.co/api/v2/pokemon/?limit=135&offset=251')}>Hoenn</div>
+          <div className='dex-name' onClick={() => setListurl('https://pokeapi.co/api/v2/pokemon/?limit=107&offset=386')}>Sinnoh</div>
+          <div className='dex-name' onClick={() => setListurl('https://pokeapi.co/api/v2/pokemon/?limit=156&offset=493')}>Unova</div>
+          <div className='dex-name' onClick={() => setListurl('https://pokeapi.co/api/v2/pokemon/?limit=72&offset=649')}>Kalos</div>
+          <div className='dex-name' onClick={() => setListurl('https://pokeapi.co/api/v2/pokemon/?limit=88&offset=721')}>Alola</div>
+          <div className='dex-name' onClick={() => setListurl('https://pokeapi.co/api/v2/pokemon/?limit=96&offset=809')}>Galar</div>
+          <div className='dex-name' onClick={() => setListurl('https://pokeapi.co/api/v2/pokemon/?limit=105&offset=905')}>Paldea</div>
         </div>
       </nav>
 
