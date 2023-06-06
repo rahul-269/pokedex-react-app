@@ -7,14 +7,15 @@ const App = () => {
   
   const [pokemonList, setPokemonList] = useState([]);
   const [selectedPokemon, setSelectedPokemon] = useState(null);
+  const [listurl, setListurl] = useState('https://pokeapi.co/api/v2/pokemon/?limit=1010');
 
   useEffect(() => {
-      fetchPokemonList();
-  }, []);
+      fetchPokemonList(listurl);
+  }, [listurl]);
 
-  const fetchPokemonList = async () => {
+  const fetchPokemonList = async (listurl) => {
     try {
-      const response = await fetch('https://pokeapi.co/api/v2/pokemon/?limit=1010');
+      const response = await fetch(listurl);
       const data = await response.json();
       setPokemonList(data.results);
     } catch (error) {
@@ -65,6 +66,21 @@ const App = () => {
       <header>
         <h1 className="header-title">POKEDEX</h1>
       </header>
+
+      <nav>
+        <div className='regional-dex'>
+          <div className='dex-name' onClick={() => console.log('National Dex')}>National Dex</div>
+          <div className='dex-name' onClick={() => setListurl('https://pokeapi.co/api/v2/pokemon/?limit=151')}>Kanto</div>
+          <div className='dex-name'>Johto</div>
+          <div className='dex-name'>Hoenn</div>
+          <div className='dex-name'>Sinnoh</div>
+          <div className='dex-name'>Unova</div>
+          <div className='dex-name'>Kalos</div>
+          <div className='dex-name'>Alola</div>
+          <div className='dex-name'>Galar</div>
+          <div className='dex-name'>Paldea</div>
+        </div>
+      </nav>
 
       <main className="main">
         <div className="pokedex-list">

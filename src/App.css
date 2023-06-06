@@ -7,13 +7,34 @@ body {
   cursor: url(./Cursor/rotom2.png),auto;
 }
 
-header {
+header,nav {
   background-color: #d53b47;
-  padding: 10px;
   color: #fff;
   text-align: center;
   border: 10px solid #2a282b;
   border-bottom: 0px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.regional-dex{
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-evenly;
+  width: 100%;
+  
+}
+
+.dex-name{
+  font-size: 20px;
+  font-weight: 600;
+  padding: 10px;
+}
+
+.dex-name:hover{
+  color: #2a282b;
 }
 
 .main{
@@ -494,6 +515,8 @@ header {
     width: 25%;
     margin: 5px 10px 5px 0px;
   }
+
+  
 }
 
 @media screen and (max-width: 480px) {
