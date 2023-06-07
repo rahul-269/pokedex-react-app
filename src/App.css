@@ -7,7 +7,7 @@ body {
   cursor: url(./Cursor/rotom2.png),auto;
 }
 
-header,nav {
+header,nav,.search {
   background-color: #d53b47;
   color: #fff;
   text-align: center;
@@ -24,7 +24,7 @@ header,nav {
   align-items: center;
   justify-content: space-evenly;
   width: 100%;
-  
+  background-color: #2a282b;
 }
 
 .dex-name{
@@ -34,7 +34,19 @@ header,nav {
 }
 
 .dex-name:hover{
-  color: #2a282b;
+  color: #c6e6e4;
+}
+
+.search-input{
+  font-size: 18px;
+  padding: 10px;
+  margin: 5px;
+  border-radius: 20px;
+  border: none;
+}
+
+.search-input:focus{
+  outline: none;
 }
 
 .main{

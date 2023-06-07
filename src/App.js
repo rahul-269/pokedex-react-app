@@ -8,6 +8,7 @@ const App = () => {
   const [pokemonList, setPokemonList] = useState([]);
   const [selectedPokemon, setSelectedPokemon] = useState(null);
   const [listurl, setListurl] = useState('https://pokeapi.co/api/v2/pokemon/?limit=1010');
+  const [searchValue, setSearchValue] = useState("");
 
   useEffect(() => {
       fetchPokemonList(listurl);
@@ -22,6 +23,23 @@ const App = () => {
       console.log(error);
     }
   };
+
+  /*useEffect(() => {
+    
+    const searchlist = pokemonList.filter((pokemon) => pokemon.name.toLowerCase().includes(searchValue.toLowerCase()));
+    setPokemonList(searchlist);
+  },[searchValue]);
+
+  const filterPokemonList = (e) =>{
+     const searchlist = pokemonList.filter((pokemon) => {
+        if(e.target.value === "")
+        return pokemon;
+        else if(pokemon.name.toLowerCase().includes(e.target.value.toLowerCase()))
+        return pokemon;
+     });
+     setPokemonList(searchlist);
+  };*/
+
 
   const capitalizeFirst = (pname) => {
     return (
@@ -82,11 +100,15 @@ const App = () => {
         </div>
       </nav>
 
+      <div className='search'>
+         <input type="text" className='search-input' onChange={(e) => setSearchValue(e.target.value)} value={searchValue} placeholder="Filter By Pokemon Name"/>
+      </div>
+
       <main className="main">
         <div className="pokedex-list">
           {Array.from({ length: Math.ceil(pokemonList.length / 5) }, (_, rowIndex) => (
             <div key={rowIndex} className="row">
-              {pokemonList.slice(rowIndex * 5, rowIndex * 5 + 5).map((pokemon) => (
+              {pokemonList.filter((pokemon) => pokemon.name.toLowerCase().includes(searchValue.toLowerCase())).slice(rowIndex * 5, rowIndex * 5 + 5).map((pokemon) => (
                 <div
                   key={pokemon.name}
                   className="pokemon"
