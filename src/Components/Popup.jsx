@@ -124,7 +124,7 @@ const Popup = ({ pokemon, onClose }) => {
       <div className="popup-content">
         <div className="popup-header">
           <div className="popup-image"> 
-          <motion.img className='popup-image-sprite' src={image} alt={name} animate={{ rotate: [0,-15,15,0], y: [0,5,-15,0] }} transition={{delay:1}} />
+          <motion.img className='popup-image-sprite' key={id} src={image} alt={name} animate={{ rotate: [0,-15,15,0], y: [0,5,-15,0] }} transition={{delay:1}} />
           </div>
           <div className="popup-info">
             <span>#{id}</span>
