@@ -123,8 +123,9 @@ const Popup = ({ pokemon, onClose }) => {
       </div>
       <div className="popup-content">
         <div className="popup-header">
-          <img className="popup-image" src={image} alt={name} />
-          
+          <div className="popup-image"> 
+          <motion.img className='popup-image-sprite' src={image} alt={name} animate={{ rotate: [0,-15,15,0], y: [0,5,-15,0] }} transition={{delay:1}} />
+          </div>
           <div className="popup-info">
             <span>#{id}</span>
             <span>{ucaseFirst(name)}</span>
@@ -169,7 +170,10 @@ const Popup = ({ pokemon, onClose }) => {
               ))}</div>}
 
           {(selected ===3) && <div className='popup-shiny-info'>
-            <img className='popup-image' key={id} src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/${id}.png`} alt={`shiny ${name}`} /></div>}
+            <div className="popup-image">
+            <motion.img className='popup-image-sprite' key={id} src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/${id}.png`} alt={`shiny ${name}`} animate={{ rotate: [0,-15,15,0], y: [0,5,-15,0] ,x:[0,5,0]}} transition={{delay:0.5}}/>
+            </div>
+          </div>}
 
         </div>
 
