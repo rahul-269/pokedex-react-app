@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import GetPokemon from './GetPokemon';
 import GetAbility from './GetAbility';
+import { motion } from 'framer-motion';
 
 const Popup = ({ pokemon, onClose }) => {
   
@@ -116,7 +117,7 @@ const Popup = ({ pokemon, onClose }) => {
   },0);
 
   return (
-    <div className="popup">
+    <motion.div className="popup" animate={{scale:1,x:"0%",y:"0%",translateX:"-50%",translateY: "-50%"}} initial={{scale:0,x:"50%", y:"50%" }} transition={{type:"tween",duration:1}}>
       <div className="popup-close" onClick={onClose}>
         EXIT
       </div>
@@ -196,7 +197,7 @@ const Popup = ({ pokemon, onClose }) => {
 
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
