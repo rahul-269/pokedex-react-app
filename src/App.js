@@ -1,17 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import './App.css';
-import Popup from './Components/Popup';
-import GetPokemon from './Components/GetPokemon';
+import React, { useState, useEffect } from "react";
+import "./App.css";
+import Popup from "./Components/Popup";
+import GetPokemon from "./Components/GetPokemon";
 
 const App = () => {
-  
   const [pokemonList, setPokemonList] = useState([]);
   const [selectedPokemon, setSelectedPokemon] = useState(null);
-  const [listurl, setListurl] = useState('https://pokeapi.co/api/v2/pokemon/?limit=1010');
+  const [listurl, setListurl] = useState(
+    "https://pokeapi.co/api/v2/pokemon/?limit=1025"
+  );
   const [searchValue, setSearchValue] = useState("");
 
   useEffect(() => {
-      fetchPokemonList(listurl);
+    fetchPokemonList(listurl);
   }, [listurl]);
 
   const fetchPokemonList = async (listurl) => {
@@ -40,13 +41,6 @@ const App = () => {
      setPokemonList(searchlist);
   };*/
 
-
-  const capitalizeFirst = (pname) => {
-    return (
-      pname.charAt(0).toUpperCase() + pname.slice(1).toLowerCase()
-    );
-  };
-
   const handlePokemonClick = async (urls) => {
     try {
       /*const response = await fetch(pokemon.url);
@@ -66,9 +60,9 @@ const App = () => {
           value: stat.base_stat,
         })),
       };*/
-      const selectedPokemonData = await GetPokemon(urls); 
+      const selectedPokemonData = await GetPokemon(urls);
       setSelectedPokemon(selectedPokemonData.selectedPokemonData);
-      document.documentElement.style.setProperty('pointer-events', `none`);
+      document.documentElement.style.setProperty("pointer-events", `none`);
     } catch (error) {
       console.log(error);
     }
@@ -76,7 +70,7 @@ const App = () => {
 
   const handleClosePopup = () => {
     setSelectedPokemon(null);
-    document.documentElement.style.setProperty('pointer-events', `auto`);
+    document.documentElement.style.setProperty("pointer-events", `auto`);
   };
 
   return (
@@ -86,47 +80,156 @@ const App = () => {
       </header>
 
       <nav>
-        <div className='regional-dex'>
-          <div className='dex-name' onClick={() => setListurl('https://pokeapi.co/api/v2/pokemon/?limit=1010')}>National Dex</div>
-          <div className='dex-name' onClick={() => setListurl('https://pokeapi.co/api/v2/pokemon/?limit=151')}>Kanto</div>
-          <div className='dex-name' onClick={() => setListurl('https://pokeapi.co/api/v2/pokemon/?limit=100&offset=151')}>Johto</div>
-          <div className='dex-name' onClick={() => setListurl('https://pokeapi.co/api/v2/pokemon/?limit=135&offset=251')}>Hoenn</div>
-          <div className='dex-name' onClick={() => setListurl('https://pokeapi.co/api/v2/pokemon/?limit=107&offset=386')}>Sinnoh</div>
-          <div className='dex-name' onClick={() => setListurl('https://pokeapi.co/api/v2/pokemon/?limit=156&offset=493')}>Unova</div>
-          <div className='dex-name' onClick={() => setListurl('https://pokeapi.co/api/v2/pokemon/?limit=72&offset=649')}>Kalos</div>
-          <div className='dex-name' onClick={() => setListurl('https://pokeapi.co/api/v2/pokemon/?limit=88&offset=721')}>Alola</div>
-          <div className='dex-name' onClick={() => setListurl('https://pokeapi.co/api/v2/pokemon/?limit=96&offset=809')}>Galar</div>
-          <div className='dex-name' onClick={() => setListurl('https://pokeapi.co/api/v2/pokemon/?limit=105&offset=905')}>Paldea</div>
+        <div className="regional-dex">
+          <div
+            className="dex-name"
+            onClick={() =>
+              setListurl("https://pokeapi.co/api/v2/pokemon/?limit=1025")
+            }
+          >
+            National Dex
+          </div>
+          <div
+            className="dex-name"
+            onClick={() =>
+              setListurl("https://pokeapi.co/api/v2/pokemon/?limit=151")
+            }
+          >
+            Kanto
+          </div>
+          <div
+            className="dex-name"
+            onClick={() =>
+              setListurl(
+                "https://pokeapi.co/api/v2/pokemon/?limit=100&offset=151"
+              )
+            }
+          >
+            Johto
+          </div>
+          <div
+            className="dex-name"
+            onClick={() =>
+              setListurl(
+                "https://pokeapi.co/api/v2/pokemon/?limit=135&offset=251"
+              )
+            }
+          >
+            Hoenn
+          </div>
+          <div
+            className="dex-name"
+            onClick={() =>
+              setListurl(
+                "https://pokeapi.co/api/v2/pokemon/?limit=107&offset=386"
+              )
+            }
+          >
+            Sinnoh
+          </div>
+          <div
+            className="dex-name"
+            onClick={() =>
+              setListurl(
+                "https://pokeapi.co/api/v2/pokemon/?limit=156&offset=493"
+              )
+            }
+          >
+            Unova
+          </div>
+          <div
+            className="dex-name"
+            onClick={() =>
+              setListurl(
+                "https://pokeapi.co/api/v2/pokemon/?limit=72&offset=649"
+              )
+            }
+          >
+            Kalos
+          </div>
+          <div
+            className="dex-name"
+            onClick={() =>
+              setListurl(
+                "https://pokeapi.co/api/v2/pokemon/?limit=88&offset=721"
+              )
+            }
+          >
+            Alola
+          </div>
+          <div
+            className="dex-name"
+            onClick={() =>
+              setListurl(
+                "https://pokeapi.co/api/v2/pokemon/?limit=96&offset=809"
+              )
+            }
+          >
+            Galar
+          </div>
+          <div
+            className="dex-name"
+            onClick={() =>
+              setListurl(
+                "https://pokeapi.co/api/v2/pokemon/?limit=120&offset=905"
+              )
+            }
+          >
+            Paldea
+          </div>
         </div>
       </nav>
 
-      <div className='search'>
-         <input type="text" className='search-input' onChange={(e) => setSearchValue(e.target.value)} value={searchValue} placeholder="Filter By Pokemon Name"/>
+      <div className="search">
+        <input
+          type="text"
+          className="search-input"
+          onChange={(e) => setSearchValue(e.target.value)}
+          value={searchValue}
+          placeholder="Filter By Pokemon Name"
+        />
       </div>
 
       <main className="main">
         <div className="pokedex-list">
-          {Array.from({ length: Math.ceil(pokemonList.length / 5) }, (_, rowIndex) => (
-            <div key={rowIndex} className="row">
-              {pokemonList.filter((pokemon) => pokemon.name.toLowerCase().includes(searchValue.toLowerCase())).slice(rowIndex * 5, rowIndex * 5 + 5).map((pokemon) => (
-                <div
-                  key={pokemon.name}
-                  className="pokemon"
-                  onClick={() => handlePokemonClick(pokemon.url)}
-                >
-                  <img
-                    src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.url.split('/')[6]}.png`}
-                    alt={pokemon.name}
-                  />
-                  <p>{capitalizeFirst(pokemon.name)}</p>
-                </div>
-              ))}
-            </div>
-          ))}
+          {Array.from(
+            { length: Math.ceil(pokemonList.length / 5) },
+            (_, rowIndex) => (
+              <div key={rowIndex} className="row">
+                {pokemonList
+                  .filter((pokemon) =>
+                    pokemon.name
+                      .toLowerCase()
+                      .includes(searchValue.toLowerCase())
+                  )
+                  .slice(rowIndex * 5, rowIndex * 5 + 5)
+                  .map((pokemon) => (
+                    <div
+                      key={pokemon.name}
+                      className="pokemon"
+                      onClick={() => handlePokemonClick(pokemon.url)}
+                    >
+                      <img
+                        src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${
+                          pokemon.url.split("/")[6]
+                        }.png`}
+                        alt={pokemon.name}
+                      />
+                      <p>
+                        {pokemon.name.charAt(0).toUpperCase() +
+                          pokemon.name.slice(1).toLowerCase()}
+                      </p>
+                    </div>
+                  ))}
+              </div>
+            )
+          )}
         </div>
       </main>
 
-      {selectedPokemon && <Popup pokemon={selectedPokemon} onClose={handleClosePopup} />}
+      {selectedPokemon && (
+        <Popup pokemon={selectedPokemon} onClose={handleClosePopup} />
+      )}
     </div>
   );
 };
