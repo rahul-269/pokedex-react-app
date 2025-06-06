@@ -3,6 +3,7 @@ import "./App.css";
 import Popup from "./Components/Popup";
 import GetPokemon from "./Components/GetPokemon";
 import { REGIONAL_POKEDEX } from "./data/regionalDex";
+import { motion } from "framer-motion";
 
 const App = () => {
   const [pokemonList, setPokemonList] = useState([]);
@@ -124,14 +125,33 @@ const App = () => {
   }, [selectedPokemon, handleClosePopup]);
 
   //loading screen
-  if (isLoading || pokemonList.length === 0) {
-    return (
-      <div className="loading">
-        <div className="spinner"></div>
-        Loading Pokemon data...
-      </div>
-    );
-  }
+  // if (isLoading || pokemonList.length === 0) {
+  //   return (
+  //     <motion.div
+  //       initial={{ opacity: 0 }}
+  //       animate={{ opacity: 1 }}
+  //       exit={{ opacity: 0 }}
+  //       className="loading-overlay"
+  //     >
+  //       <div className="loading-content">
+  //         <div className="pokeball-loader">
+  //           <div className="pokeball">
+  //             <div className="pokeball-top"></div>
+  //             <div className="pokeball-middle"></div>
+  //             <div className="pokeball-bottom"></div>
+  //             <div className="pokeball-center"></div>
+  //           </div>
+  //         </div>
+  //         <p className="loading-text">Loading Pokémon...</p>
+  //         <div className="loading-dots">
+  //           <span>.</span>
+  //           <span>.</span>
+  //           <span>.</span>
+  //         </div>
+  //       </div>
+  //     </motion.div>
+  //   );
+  // }
 
   //error screen
   if (error && pokemonList.length === 0) {
@@ -181,7 +201,7 @@ const App = () => {
             className="search-input"
             onChange={handleSearchChange}
             value={searchValue}
-            placeholder="Search by name or number..."
+            placeholder="Search Name Or Dex Number..."
             aria-label="Search Pokemon"
           />
         </div>
@@ -252,9 +272,29 @@ const App = () => {
 
       {/*loading overlay for pokemon details, should make this a pokeball or something*/}
       {isLoading && selectedPokemon === null && (
-        <div className="loading-overlay">
-          <div className="spinner"></div>
+        <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="loading-overlay"
+      >
+        <div className="loading-content">
+          <div className="pokeball-loader">
+            <div className="pokeball">
+              <div className="pokeball-top"></div>
+              <div className="pokeball-middle"></div>
+              <div className="pokeball-bottom"></div>
+              <div className="pokeball-center"></div>
+            </div>
+          </div>
+          <p className="loading-text">Loading Pokémon...</p>
+          <div className="loading-dots">
+            <span>.</span>
+            <span>.</span>
+            <span>.</span>
+          </div>
         </div>
+      </motion.div>
       )}
     </div>
   );
