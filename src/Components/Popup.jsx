@@ -9,6 +9,7 @@ const ModernPokedexPopup = ({ pokemon, onClose }) => {
   const [activeTab, setActiveTab] = useState("overview");
   const [shinyMode, setShinyMode] = useState(false);
   const [evolutionData, setEvolutionData] = useState(null);
+  console.log(evolutionData);
   const [speciesData, setSpeciesData] = useState(null);
   const [locationData, setLocationData] = useState([]);
   const [varietiesData, setVarietiesData] = useState([]);
@@ -64,7 +65,7 @@ const ModernPokedexPopup = ({ pokemon, onClose }) => {
         }
 
         // Fetch details for top moves
-        const topMoves = moves.slice(0, 10);
+        const topMoves = moves;
         const moveDetailsPromises = topMoves.map((move) =>
           fetch(move.move.url).then((res) => res.json())
         );
@@ -83,7 +84,7 @@ const ModernPokedexPopup = ({ pokemon, onClose }) => {
   }, [id]);
 
   const nextPokemon = async () => {
-    if (id >= 1010) return;
+    if (id >= 1025) return;
     setLoading(true);
     setPurl(`https://pokeapi.co/api/v2/pokemon/${id + 1}/`);
   };
@@ -185,7 +186,7 @@ const ModernPokedexPopup = ({ pokemon, onClose }) => {
       evolutionChain.push({
         name: current.species.name,
         id: pokemonId,
-        evolutionDetails: current.evolution_details[0] || null,
+        evolutionDetails: current?.evolves_to[0]?.evolution_details[0] || null,
       });
       current = current.evolves_to[0];
     }
@@ -580,89 +581,101 @@ const ModernPokedexPopup = ({ pokemon, onClose }) => {
         return (
           <div className="pokedex-content">
             <div className="info-section">
-              <h3 className="section-title">Notable Moves</h3>
+              <h3 className="section-title">Moves</h3>
               <div className="moves-container">
-                {moves.slice(0, 15)?.map((move, index) => {
-                  const moveDetail = moveDetails[move.move.name];
-                  return (
-                    <motion.div
-                      key={move.move.name}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: index * 0.02 }}
-                      className="move-card"
-                    >
-                      <div className="move-header">
-                        <div className="move-name">
-                          {ucaseFirst(move.move.name.replace("-", " "))}
-                        </div>
-                        <div className="move-level">
-                          {move.version_group_details[0]?.level_learned_at >
-                            0 && (
-                            <span className="level-badge">
-                              Lv.{" "}
-                              {move.version_group_details[0].level_learned_at}
+                {moves
+                  ?.sort((a, b) => {
+                    const methodPriority = {
+                      "level-up": 1,
+                      egg: 2,
+                      tutor: 3,
+                    };
+                    const methodA =
+                      a.version_group_details[0]?.move_learn_method?.name || "";
+                    const methodB =
+                      b.version_group_details[0]?.move_learn_method?.name || "";
+
+                    const priorityA = methodPriority[methodA] ?? 99; // others get lowest priority
+                    const priorityB = methodPriority[methodB] ?? 99;
+
+                    return priorityA - priorityB;
+                  })
+                  ?.map((move, index) => {
+                    const moveDetail = moveDetails[move.move.name];
+                    return (
+                      <motion.div
+                        key={move.move.name}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: index * 0.02 }}
+                        className="move-card"
+                      >
+                        <div className="move-header">
+                          <div className="move-name">
+                            {ucaseFirst(move.move.name.replace("-", " "))}
+                          </div>
+                          <div className="move-level">
+                            {move.version_group_details[0]?.level_learned_at >
+                              0 && (
+                              <span className="level-badge">
+                                Lv.{" "}
+                                {move.version_group_details[0].level_learned_at}
+                              </span>
+                            )}
+                            <span className="method-badge">
+                              {ucaseFirst(
+                                move.version_group_details[0]?.move_learn_method
+                                  ?.name || "unknown"
+                              )}
                             </span>
-                          )}
-                          <span className="method-badge">
-                            {ucaseFirst(
-                              move.version_group_details[0]?.move_learn_method
-                                ?.name || "unknown"
-                            )}
-                          </span>
+                          </div>
                         </div>
-                      </div>
-                      {moveDetail && (
-                        <div className="move-details">
-                          <div className="move-stats">
-                            {moveDetail.type && (
-                              <span
-                                className="move-type"
-                                style={{
-                                  backgroundColor: getTypeColor(
-                                    moveDetail.type.name
-                                  ),
-                                }}
-                              >
-                                {ucaseFirst(moveDetail.type.name)}
-                              </span>
-                            )}
-                            {moveDetail.damage_class && (
-                              <span className="move-category">
-                                {ucaseFirst(moveDetail.damage_class.name)}
-                              </span>
-                            )}
-                            {moveDetail.power && (
-                              <span className="move-power">
-                                PWR: {moveDetail.power}
-                              </span>
-                            )}
-                            {moveDetail.accuracy && (
-                              <span className="move-accuracy">
-                                ACC: {moveDetail.accuracy}%
-                              </span>
-                            )}
-                            {moveDetail.pp && (
-                              <span className="move-pp">
-                                PP: {moveDetail.pp}
-                              </span>
+                        {moveDetail && (
+                          <div className="move-details">
+                            <div className="move-stats">
+                              {moveDetail.type && (
+                                <span
+                                  className="move-type"
+                                  style={{
+                                    backgroundColor: getTypeColor(
+                                      moveDetail.type.name
+                                    ),
+                                  }}
+                                >
+                                  {ucaseFirst(moveDetail.type.name)}
+                                </span>
+                              )}
+                              {moveDetail.damage_class && (
+                                <span className="move-category">
+                                  {ucaseFirst(moveDetail.damage_class.name)}
+                                </span>
+                              )}
+                              {moveDetail.power && (
+                                <span className="move-power">
+                                  PWR: {moveDetail.power}
+                                </span>
+                              )}
+                              {moveDetail.accuracy && (
+                                <span className="move-accuracy">
+                                  ACC: {moveDetail.accuracy}%
+                                </span>
+                              )}
+                              {moveDetail.pp && (
+                                <span className="move-pp">
+                                  PP: {moveDetail.pp}
+                                </span>
+                              )}
+                            </div>
+                            {moveDetail.effect_entries?.[0] && (
+                              <div className="move-description">
+                                {moveDetail.effect_entries[0].short_effect}
+                              </div>
                             )}
                           </div>
-                          {moveDetail.effect_entries?.[0] && (
-                            <div className="move-description">
-                              {moveDetail.effect_entries[0].short_effect}
-                            </div>
-                          )}
-                        </div>
-                      )}
-                    </motion.div>
-                  );
-                })}
-                {moves.length > 15 && (
-                  <div className="moves-more">
-                    And {moves.length - 15} more moves available...
-                  </div>
-                )}
+                        )}
+                      </motion.div>
+                    );
+                  })}
               </div>
             </div>
           </div>
@@ -700,6 +713,17 @@ const ModernPokedexPopup = ({ pokemon, onClose }) => {
                             <div className="arrow">→</div>
                             {evolution.evolutionDetails && (
                               <div className="evolution-requirement">
+                                {evolution.evolutionDetails.trigger && (
+                                  <span>
+                                    {ucaseFirst(
+                                      evolution.evolutionDetails.trigger.name
+                                    )}
+                                  </span>
+                                )}
+                              </div>
+                            )}
+                            {evolution.evolutionDetails && (
+                              <div className="evolution-requirement">
                                 {evolution.evolutionDetails.min_level && (
                                   <span>
                                     Level {evolution.evolutionDetails.min_level}
@@ -712,11 +736,23 @@ const ModernPokedexPopup = ({ pokemon, onClose }) => {
                                     )}
                                   </span>
                                 )}
-                                {evolution.evolutionDetails.trigger && (
+                                {evolution.evolutionDetails.held_item && (
                                   <span>
                                     {ucaseFirst(
-                                      evolution.evolutionDetails.trigger.name
+                                      evolution.evolutionDetails.held_item.name
                                     )}
+                                  </span>
+                                )}
+                                {evolution.evolutionDetails.min_happiness && (
+                                  <span>
+                                    Min Happiness{" "}
+                                    {evolution.evolutionDetails.min_happiness}
+                                  </span>
+                                )}
+                                {evolution.evolutionDetails.min_happiness && (
+                                  <span>
+                                    Min Happiness{" "}
+                                    {evolution.evolutionDetails.min_happiness}
                                   </span>
                                 )}
                               </div>
@@ -746,7 +782,7 @@ const ModernPokedexPopup = ({ pokemon, onClose }) => {
               <h3 className="section-title">Habitat & Locations</h3>
               {locationData.length > 0 ? (
                 <div className="locations-container">
-                  {locationData.slice(0, 10).map((location, index) => (
+                  {locationData?.map((location, index) => (
                     <div key={index} className="location-item">
                       <div className="location-name">
                         {ucaseFirst(
@@ -767,11 +803,6 @@ const ModernPokedexPopup = ({ pokemon, onClose }) => {
                       </div>
                     </div>
                   ))}
-                  {locationData.length > 10 && (
-                    <div className="locations-more">
-                      And {locationData.length - 10} more locations...
-                    </div>
-                  )}
                 </div>
               ) : (
                 <div className="no-locations">
@@ -893,7 +924,11 @@ const ModernPokedexPopup = ({ pokemon, onClose }) => {
                       scale: { duration: 0.3 },
                       rotate: { duration: 2, repeat: Infinity },
                     }}
-                    src={shinyMode ? pokeman.shiny_image : image}
+                    src={
+                      shinyMode
+                        ? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/${id}.png`
+                        : `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`
+                    }
                     alt={name}
                     className="pokemon-main-image"
                   />
@@ -912,8 +947,8 @@ const ModernPokedexPopup = ({ pokemon, onClose }) => {
             </div>
 
             <div className="pokemon-basic-info">
-              <div className="pokemon-name-section">
-                <h1 className="pokemon-name">
+              <div className="pokemon-name-section-dex">
+                <h1 className="pokemon-name-dex">
                   {ucaseFirst(name)}
                   {speciesData?.is_legendary && (
                     <span className="legendary-badge">★ Legendary</span>
@@ -973,11 +1008,11 @@ const ModernPokedexPopup = ({ pokemon, onClose }) => {
             ← Previous
           </button>
 
-          <div className="pokemon-counter">{id} / 1010</div>
+          <div className="pokemon-counter">{id} / 1025</div>
 
           <button
             onClick={nextPokemon}
-            disabled={id >= 1010 || loading}
+            disabled={id >= 1025 || loading}
             className="nav-button next"
           >
             Next →
@@ -1026,9 +1061,9 @@ const ModernPokedexPopup = ({ pokemon, onClose }) => {
         <div className="pokedex-footer">
           <div className="pokedex-brand">
             <span className="brand-text">PokéDex</span>
-            <span className="brand-version">Version 2.0</span>
+            <span className="brand-version">This is a personal project</span>
           </div>
-          <div className="footer-controls">
+          {/* <div className="footer-controls">
             <div className="volume-control">
               <span className="volume-icon">🔊</span>
               <div className="volume-bars">
@@ -1042,7 +1077,7 @@ const ModernPokedexPopup = ({ pokemon, onClose }) => {
               <span className="battery-icon">🔋</span>
               <span className="battery-level">85%</span>
             </div>
-          </div>
+          </div> */}
         </div>
 
         {/* Pokédex Screen Effects */}
@@ -1064,7 +1099,7 @@ const ModernPokedexPopup = ({ pokemon, onClose }) => {
           </div>
         </div>
 
-        <div className="side-panel right">
+        {/* <div className="side-panel right">
           <div className="panel-screen">
             <div className="mini-stats">
               <div className="mini-stat">
@@ -1115,10 +1150,10 @@ const ModernPokedexPopup = ({ pokemon, onClose }) => {
             <button className="panel-btn round green"></button>
             <button className="panel-btn round blue"></button>
           </div>
-        </div>
+        </div> */}
 
         {/* D-Pad and Action Buttons */}
-        <div className="control-pad">
+        {/* <div className="control-pad">
           <div className="d-pad">
             <button className="d-btn up">▲</button>
             <button className="d-btn down">▼</button>
@@ -1130,7 +1165,7 @@ const ModernPokedexPopup = ({ pokemon, onClose }) => {
             <button className="action-btn a">A</button>
             <button className="action-btn b">B</button>
           </div>
-        </div>
+        </div> */}
 
         {/* Loading Overlay */}
         {loading && (
