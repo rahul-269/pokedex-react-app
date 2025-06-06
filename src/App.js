@@ -1,234 +1,260 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import "./App.css";
 import Popup from "./Components/Popup";
 import GetPokemon from "./Components/GetPokemon";
+import { REGIONAL_POKEDEX } from "./data/regionalDex";
 
 const App = () => {
   const [pokemonList, setPokemonList] = useState([]);
   const [selectedPokemon, setSelectedPokemon] = useState(null);
-  const [listurl, setListurl] = useState(
-    "https://pokeapi.co/api/v2/pokemon/?limit=1025"
-  );
+  console.log(selectedPokemon);
+  const [activeRegion, setActiveRegion] = useState("national");
   const [searchValue, setSearchValue] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
+  //current region data from the data we added using the active region user selected
+  const currentRegion = useMemo(
+    () =>
+      REGIONAL_POKEDEX.find((region) => region.id === activeRegion) ||
+      REGIONAL_POKEDEX[0],
+    [activeRegion]
+  );
+
+  //fetch from pokeapi using the url from the object we made based on limits
+  const fetchPokemonList = useCallback(async (url) => {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+
+      //No data other than name was available here for the list so we use the index to number them as ids
+      //index doesnt work on filter
+      const pokemonWithIds = data.results.map((pokemon, index) => ({
+        ...pokemon,
+        // id: index + 1,
+        // displayId: String(parseInt(index + 1)).padStart(3, "0"),
+        id: pokemon.url.split("/")[6],
+        displayId: String(parseInt(pokemon.url.split("/")[6])).padStart(3, "0"),
+      }));
+
+      setPokemonList(pokemonWithIds);
+    } catch (error) {
+      console.error("Error fetching Pokemon list:", error);
+      setError("Failed to load Pokemon data. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  //whenever region changes we update the list
   useEffect(() => {
-    fetchPokemonList(listurl);
-  }, [listurl]);
+    fetchPokemonList(currentRegion.url);
+  }, [currentRegion.url, fetchPokemonList]);
 
-  const fetchPokemonList = async (listurl) => {
+  //we let them serach based on name and number
+  const filteredPokemon = useMemo(() => {
+    if (!searchValue.trim()) return pokemonList;
+
+    return pokemonList.filter(
+      (pokemon) =>
+        pokemon.name.toLowerCase().includes(searchValue.toLowerCase()) ||
+        pokemon.displayId.includes(searchValue)
+    );
+  }, [pokemonList, searchValue]);
+
+  const handleRegionChange = useCallback((regionId) => {
+    setActiveRegion(regionId);
+    setSearchValue(""); //clear search when we change region
+  }, []);
+
+  const handleSearchChange = useCallback((e) => {
+    setSearchValue(e.target.value);
+  }, []);
+
+  //When they click a card we handle it here to open dialog
+  const handlePokemonClick = useCallback(async (pokemonUrl) => {
     try {
-      const response = await fetch(listurl);
-      const data = await response.json();
-      setPokemonList(data.results);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  /*useEffect(() => {
-    
-    const searchlist = pokemonList.filter((pokemon) => pokemon.name.toLowerCase().includes(searchValue.toLowerCase()));
-    setPokemonList(searchlist);
-  },[searchValue]);
-
-  const filterPokemonList = (e) =>{
-     const searchlist = pokemonList.filter((pokemon) => {
-        if(e.target.value === "")
-        return pokemon;
-        else if(pokemon.name.toLowerCase().includes(e.target.value.toLowerCase()))
-        return pokemon;
-     });
-     setPokemonList(searchlist);
-  };*/
-
-  const handlePokemonClick = async (urls) => {
-    try {
-      /*const response = await fetch(pokemon.url);
-      const data = await response.json();
-      console.log(data);
-      const selectedPokemonData = {
-        image: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${data.id}.png`,
-        name: data.name,
-        length: data.types.length,
-        type: data.types,
-        abilities: data.abilities,
-        id: data.id,
-        height: data.height,
-        weight: data.weight,
-        stats: data.stats.map((stat) => ({
-          name: stat.stat.name,
-          value: stat.base_stat,
-        })),
-      };*/
-      const selectedPokemonData = await GetPokemon(urls);
+      setIsLoading(true);
+      const selectedPokemonData = await GetPokemon(pokemonUrl);
       setSelectedPokemon(selectedPokemonData.selectedPokemonData);
-      document.documentElement.style.setProperty("pointer-events", `none`);
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
-  const handleClosePopup = () => {
+      // Disable body scroll when popup is open , not working so we moved to useeffect
+      //   document.body.style.overflow = "hidden";
+    } catch (error) {
+      console.error("Error fetching Pokemon details:", error);
+      setError("Failed to load Pokemon details. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  //dialog close
+  const handleClosePopup = useCallback(() => {
     setSelectedPokemon(null);
-    document.documentElement.style.setProperty("pointer-events", `auto`);
-  };
+    // also not working moved to useeffect
+    // document.body.style.overflow = "unset";
+  }, []);
+
+  //basic keyboard nav and the scrollbar hide on body here now
+  useEffect(() => {
+    if (selectedPokemon) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+
+    const handleKeyPress = (event) => {
+      if (event.key === "Escape" && selectedPokemon) {
+        handleClosePopup();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyPress);
+    return () => {
+      document.removeEventListener("keydown", handleKeyPress);
+      //body scroll reset here now
+      document.body.style.overflow = "auto";
+    };
+  }, [selectedPokemon, handleClosePopup]);
+
+  //loading screen
+  if (isLoading || pokemonList.length === 0) {
+    return (
+      <div className="loading">
+        <div className="spinner"></div>
+        Loading Pokemon data...
+      </div>
+    );
+  }
+
+  //error screen
+  if (error && pokemonList.length === 0) {
+    return (
+      <div className="error-state">
+        <h2>Oops! Something went wrong</h2>
+        <p>{error}</p>
+        <button onClick={() => fetchPokemonList(currentRegion.url)}>
+          Try Again
+        </button>
+      </div>
+    );
+  }
 
   return (
-    <div>
-      <header>
-        <h1 className="header-title">POKEDEX</h1>
+    <div className="app">
+      <header className="header">
+        <h1 className="header-title">POKÉDEX</h1>
+        <p className="header-subtitle">
+          Discover and explore the world of Pokémon
+        </p>
       </header>
 
-      <nav>
+      {/*navigation buttons we map over using the dummy data we made*/}
+      <nav className="nav">
         <div className="regional-dex">
-          <div
-            className="dex-name"
-            onClick={() =>
-              setListurl("https://pokeapi.co/api/v2/pokemon/?limit=1025")
-            }
-          >
-            National Dex
-          </div>
-          <div
-            className="dex-name"
-            onClick={() =>
-              setListurl("https://pokeapi.co/api/v2/pokemon/?limit=151")
-            }
-          >
-            Kanto
-          </div>
-          <div
-            className="dex-name"
-            onClick={() =>
-              setListurl(
-                "https://pokeapi.co/api/v2/pokemon/?limit=100&offset=151"
-              )
-            }
-          >
-            Johto
-          </div>
-          <div
-            className="dex-name"
-            onClick={() =>
-              setListurl(
-                "https://pokeapi.co/api/v2/pokemon/?limit=135&offset=251"
-              )
-            }
-          >
-            Hoenn
-          </div>
-          <div
-            className="dex-name"
-            onClick={() =>
-              setListurl(
-                "https://pokeapi.co/api/v2/pokemon/?limit=107&offset=386"
-              )
-            }
-          >
-            Sinnoh
-          </div>
-          <div
-            className="dex-name"
-            onClick={() =>
-              setListurl(
-                "https://pokeapi.co/api/v2/pokemon/?limit=156&offset=493"
-              )
-            }
-          >
-            Unova
-          </div>
-          <div
-            className="dex-name"
-            onClick={() =>
-              setListurl(
-                "https://pokeapi.co/api/v2/pokemon/?limit=72&offset=649"
-              )
-            }
-          >
-            Kalos
-          </div>
-          <div
-            className="dex-name"
-            onClick={() =>
-              setListurl(
-                "https://pokeapi.co/api/v2/pokemon/?limit=88&offset=721"
-              )
-            }
-          >
-            Alola
-          </div>
-          <div
-            className="dex-name"
-            onClick={() =>
-              setListurl(
-                "https://pokeapi.co/api/v2/pokemon/?limit=96&offset=809"
-              )
-            }
-          >
-            Galar
-          </div>
-          <div
-            className="dex-name"
-            onClick={() =>
-              setListurl(
-                "https://pokeapi.co/api/v2/pokemon/?limit=120&offset=905"
-              )
-            }
-          >
-            Paldea
-          </div>
+          {REGIONAL_POKEDEX.map((region) => (
+            <button
+              key={region.id}
+              className={`dex-name ${
+                activeRegion === region.id ? "active" : ""
+              }`}
+              onClick={() => handleRegionChange(region.id)}
+              aria-pressed={activeRegion === region.id}
+            >
+              {region.name}
+            </button>
+          ))}
         </div>
       </nav>
 
-      <div className="search">
-        <input
-          type="text"
-          className="search-input"
-          onChange={(e) => setSearchValue(e.target.value)}
-          value={searchValue}
-          placeholder="Filter By Pokemon Name"
-        />
-      </div>
-
-      <main className="main">
-        <div className="pokedex-list">
-          {Array.from(
-            { length: Math.ceil(pokemonList.length / 5) },
-            (_, rowIndex) => (
-              <div key={rowIndex} className="row">
-                {pokemonList
-                  .filter((pokemon) =>
-                    pokemon.name
-                      .toLowerCase()
-                      .includes(searchValue.toLowerCase())
-                  )
-                  .slice(rowIndex * 5, rowIndex * 5 + 5)
-                  .map((pokemon) => (
-                    <div
-                      key={pokemon.name}
-                      className="pokemon"
-                      onClick={() => handlePokemonClick(pokemon.url)}
-                    >
-                      <img
-                        src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${
-                          pokemon.url.split("/")[6]
-                        }.png`}
-                        alt={pokemon.name}
-                      />
-                      <p>
-                        {pokemon.name.charAt(0).toUpperCase() +
-                          pokemon.name.slice(1).toLowerCase()}
-                      </p>
-                    </div>
-                  ))}
-              </div>
-            )
-          )}
+      {/*search bar container, swap out better icon when u get time*/}
+      <section className="search">
+        <div className="search-container">
+          <input
+            type="text"
+            className="search-input"
+            onChange={handleSearchChange}
+            value={searchValue}
+            placeholder="Search by name or number..."
+            aria-label="Search Pokemon"
+          />
         </div>
+      </section>
+
+      {/*central list we display*/}
+      <main className="main">
+        {filteredPokemon.length === 0 && searchValue ? (
+          <div className="empty-state">
+            <h3>No Pokémon found</h3>
+            <p>
+              Try adjusting your search terms or explore a different region.
+            </p>
+          </div>
+        ) : (
+          <div className="pokedex-list">
+            {filteredPokemon.map((pokemon) => (
+              <article
+                key={pokemon.name}
+                className="pokemon fade-in"
+                onClick={() => handlePokemonClick(pokemon.url)}
+                role="button"
+                tabIndex={0}
+                onKeyPress={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    handlePokemonClick(pokemon.url);
+                  }
+                }}
+                aria-label={`View details for ${pokemon.name}`}
+              >
+                <div className="pokemon-image-container" key={pokemon.id}>
+                  <img
+                    key={pokemon.id}
+                    // src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.id}.png`}
+                    src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.id}.png`}
+                    alt={pokemon.name}
+                    loading="lazy"
+                    onError={(e) => {
+                      e.target.src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/0.png`;
+                    }}
+                  />
+                </div>
+                <h3 className="pokemon-name">
+                  {pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}
+                </h3>
+                <p className="pokemon-id">#{pokemon.displayId}</p>
+              </article>
+            ))}
+          </div>
+        )}
       </main>
 
+      {/*pokedex anime style dialog attempt , idk if i should remove the dpad*/}
       {selectedPokemon && (
-        <Popup pokemon={selectedPokemon} onClose={handleClosePopup} />
+        <div
+          className="popup-overlay"
+          onClick={handleClosePopup}
+          role="dialog"
+          aria-modal="true"
+        >
+          <Popup
+            pokemon={selectedPokemon}
+            onClose={handleClosePopup}
+            onClick={(e) => e.stopPropagation()} //prevent closing when clicking inside the dialog
+          />
+        </div>
+      )}
+
+      {/*loading overlay for pokemon details, should make this a pokeball or something*/}
+      {isLoading && selectedPokemon === null && (
+        <div className="loading-overlay">
+          <div className="spinner"></div>
+        </div>
       )}
     </div>
   );
