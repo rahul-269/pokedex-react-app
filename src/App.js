@@ -254,6 +254,14 @@ const App = () => {
         )}
       </main>
 
+      <footer className="footer">
+        <p className="footer-subtitle">
+          This is a personal project and is not affiliated with "The Pokémon
+          Company" and does not own or claim any rights to any Nintendo
+          trademark or the Pokémon trademark.
+        </p>
+      </footer>
+
       {/*pokedex anime style dialog attempt , idk if i should remove the dpad*/}
       {selectedPokemon && (
         <div
@@ -273,28 +281,28 @@ const App = () => {
       {/*loading overlay for pokemon details, should make this a pokeball or something*/}
       {isLoading && selectedPokemon === null && (
         <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        className="loading-overlay"
-      >
-        <div className="loading-content">
-          <div className="pokeball-loader">
-            <div className="pokeball">
-              <div className="pokeball-top"></div>
-              <div className="pokeball-middle"></div>
-              <div className="pokeball-bottom"></div>
-              <div className="pokeball-center"></div>
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="loading-overlay"
+        >
+          <div className="loading-content">
+            <div className="pokeball-loader">
+              <div className="pokeball">
+                <div className="pokeball-top"></div>
+                <div className="pokeball-middle"></div>
+                <div className="pokeball-bottom"></div>
+                <div className="pokeball-center"></div>
+              </div>
+            </div>
+            <p className="loading-text">Loading Pokémon...</p>
+            <div className="loading-dots">
+              <span>.</span>
+              <span>.</span>
+              <span>.</span>
             </div>
           </div>
-          <p className="loading-text">Loading Pokémon...</p>
-          <div className="loading-dots">
-            <span>.</span>
-            <span>.</span>
-            <span>.</span>
-          </div>
-        </div>
-      </motion.div>
+        </motion.div>
       )}
     </div>
   );

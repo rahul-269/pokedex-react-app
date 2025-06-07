@@ -9,44 +9,48 @@ const ModernPokedexPopup = ({ pokemon, onClose }) => {
   const [activeTab, setActiveTab] = useState("overview");
   const [shinyMode, setShinyMode] = useState(false);
   const [evolutionData, setEvolutionData] = useState(null);
-  console.log(evolutionData);
+  // console.log(evolutionData);
   const [speciesData, setSpeciesData] = useState(null);
   const [locationData, setLocationData] = useState([]);
   const [varietiesData, setVarietiesData] = useState([]);
   const [damageRelations, setDamageRelations] = useState({});
   const [moveDetails, setMoveDetails] = useState({});
+  // console.log(moveDetails)
+  const [selectedVersion, setSelectedVersion] = useState("");
 
   const { image, name, type, abilities, moves, id, height, weight, stats } =
     pokeman;
 
+  // console.log(moves);
+
   const [purl, setPurl] = useState(`https://pokeapi.co/api/v2/pokemon/${id}/`);
 
-  // Fetch comprehensive Pokemon data
+  //big boy fetch for comprehensive Pokemon data
   useEffect(() => {
     const fetchAdditionalData = async () => {
       try {
-        // Fetch species data
+        //fetch species data
         const speciesResponse = await fetch(
           `https://pokeapi.co/api/v2/pokemon-species/${id}/`
         );
         const species = await speciesResponse.json();
         setSpeciesData(species);
 
-        // Fetch evolution chain
+        //fetch evolution chain
         if (species.evolution_chain?.url) {
           const evolutionResponse = await fetch(species.evolution_chain.url);
           const evolution = await evolutionResponse.json();
           setEvolutionData(evolution);
         }
 
-        // Fetch location data
+        //fetch location data
         const locationResponse = await fetch(
           `https://pokeapi.co/api/v2/pokemon/${id}/encounters`
         );
         const locations = await locationResponse.json();
         setLocationData(locations);
 
-        // Fetch type damage relations
+        //fetch type damage relations
         const typeRelations = {};
         for (const typeInfo of type) {
           const typeResponse = await fetch(typeInfo.type.url);
@@ -55,7 +59,7 @@ const ModernPokedexPopup = ({ pokemon, onClose }) => {
         }
         setDamageRelations(typeRelations);
 
-        // Fetch varieties/forms
+        //fetch varieties/forms
         if (species.varieties) {
           const varietiesPromises = species.varieties.map((variety) =>
             fetch(variety.pokemon.url).then((res) => res.json())
@@ -64,7 +68,7 @@ const ModernPokedexPopup = ({ pokemon, onClose }) => {
           setVarietiesData(varieties);
         }
 
-        // Fetch details for top moves
+        //fetch details for top moves
         const topMoves = moves;
         const moveDetailsPromises = topMoves.map((move) =>
           fetch(move.move.url).then((res) => res.json())
@@ -212,7 +216,7 @@ const ModernPokedexPopup = ({ pokemon, onClose }) => {
     { id: "forms", label: "Forms", icon: "🔄" },
   ];
 
-  const renderTabContent = () => {
+  const renderTabContent = (activeTab, selectedVersion, setSelectedVersion) => {
     switch (activeTab) {
       case "overview":
         return (
@@ -282,7 +286,6 @@ const ModernPokedexPopup = ({ pokemon, onClose }) => {
             <div className="info-section">
               <h3 className="section-title">Pokédex Entry</h3>
               <div className="pokemon-description">
-                <p>{getFlavorText()}</p>
                 {speciesData?.genera && (
                   <div className="genera-info">
                     <strong>Category:</strong>{" "}
@@ -290,6 +293,7 @@ const ModernPokedexPopup = ({ pokemon, onClose }) => {
                       ?.genus || "Unknown"}
                   </div>
                 )}
+                <p>{getFlavorText()}</p>
               </div>
             </div>
 
@@ -355,7 +359,7 @@ const ModernPokedexPopup = ({ pokemon, onClose }) => {
               </div>
             </div>
 
-            {/* Type Effectiveness */}
+            {/*type effectiveness not proper this is individual need to do combo*/}
             <div className="info-section">
               <h3 className="section-title">Type Effectiveness</h3>
               {Object.keys(damageRelations).length > 0 && (
@@ -461,7 +465,7 @@ const ModernPokedexPopup = ({ pokemon, onClose }) => {
                     <div className="stat-name">
                       {ucaseFirst(stat.name.replace("-", " "))}
                     </div>
-                    <div className="stat-value">{stat.value}</div>
+                    {/* <div className="stat-value">{stat.value}</div> */}
                     <div className="stat-bar-container">
                       <motion.div
                         className="stat-bar"
@@ -471,15 +475,16 @@ const ModernPokedexPopup = ({ pokemon, onClose }) => {
                         transition={{ delay: index * 0.1 + 0.2, duration: 0.8 }}
                       />
                     </div>
-                    <div className="stat-rank">
+                    <div className="stat-value">{stat.value}</div>
+                    {/* <div className="stat-rank">
                       {getStatRank(stat.name, stat.value)}
-                    </div>
+                    </div> */}
                   </motion.div>
                 ))}
                 <div className="stat-total">
                   <div className="stat-name">Base Stat Total</div>
                   <div className="stat-value">{baseStatTotal}</div>
-                  <div className="stat-rank">
+                  {/* <div className="stat-rank">
                     {baseStatTotal >= 600
                       ? "Legendary"
                       : baseStatTotal >= 500
@@ -487,7 +492,7 @@ const ModernPokedexPopup = ({ pokemon, onClose }) => {
                       : baseStatTotal >= 400
                       ? "Good"
                       : "Average"}
-                  </div>
+                  </div> */}
                 </div>
               </div>
             </div>
@@ -496,12 +501,24 @@ const ModernPokedexPopup = ({ pokemon, onClose }) => {
               <h3 className="section-title">Stat Analysis</h3>
               <div className="stat-analysis">
                 <div className="analysis-item">
+                  <strong>Stat Tier:</strong>{" "}
+                  {baseStatTotal >= 600
+                    ? "Legendary"
+                    : baseStatTotal >= 500
+                    ? "Excellent"
+                    : baseStatTotal >= 400
+                    ? "Good"
+                    : "Average"}
+                </div>
+                <div className="analysis-item">
                   <strong>Highest Stat:</strong>{" "}
-                  {stats
-                    .reduce((prev, current) =>
-                      prev.value > current.value ? prev : current
-                    )
-                    .name.replace("-", " ")}{" "}
+                  {ucaseFirst(
+                    stats
+                      .reduce((prev, current) =>
+                        prev.value > current.value ? prev : current
+                      )
+                      .name.replace("-", " ")
+                  )}{" "}
                   (
                   {
                     stats.reduce((prev, current) =>
@@ -512,11 +529,13 @@ const ModernPokedexPopup = ({ pokemon, onClose }) => {
                 </div>
                 <div className="analysis-item">
                   <strong>Lowest Stat:</strong>{" "}
-                  {stats
-                    .reduce((prev, current) =>
-                      prev.value < current.value ? prev : current
-                    )
-                    .name.replace("-", " ")}{" "}
+                  {ucaseFirst(
+                    stats
+                      .reduce((prev, current) =>
+                        prev.value < current.value ? prev : current
+                      )
+                      .name.replace("-", " ")
+                  )}{" "}
                   (
                   {
                     stats.reduce((prev, current) =>
@@ -525,14 +544,14 @@ const ModernPokedexPopup = ({ pokemon, onClose }) => {
                   }
                   )
                 </div>
-                <div className="analysis-item">
+                {/* <div className="analysis-item">
                   <strong>Stat Spread:</strong>{" "}
                   {baseStatTotal >= 500
                     ? "Well-rounded powerhouse"
                     : baseStatTotal >= 400
                     ? "Balanced combatant"
                     : "Specialist fighter"}
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
@@ -557,14 +576,15 @@ const ModernPokedexPopup = ({ pokemon, onClose }) => {
                         {ucaseFirst(ability.ability.name.replace("-", " "))}
                       </h4>
                       <div className="ability-badges">
-                        {ability.is_hidden && (
+                        {ability.is_hidden ? (
                           <span className="ability-badge hidden">
                             Hidden Ability
                           </span>
+                        ) : (
+                          <span className="ability-badge">
+                            Regular Ability {ability.slot}
+                          </span>
                         )}
-                        <span className="ability-badge slot">
-                          Slot {ability.slot}
-                        </span>
                       </div>
                     </div>
                     <div className="ability-description">
@@ -578,105 +598,194 @@ const ModernPokedexPopup = ({ pokemon, onClose }) => {
         );
 
       case "moves":
+        //get all unique version groups from moves and sort by release order (latest first)
+        const versionGroups = [
+          ...new Set(
+            moves?.flatMap((move) =>
+              move.version_group_details.map(
+                (detail) => detail.version_group.name
+              )
+            ) || []
+          ),
+        ].sort((a, b) => {
+          //version group order (latest first)
+          const versionOrder = {
+            "scarlet-violet": 1,
+            "brilliant-diamond-shining-pearl": 2,
+            "legends-arceus": 3,
+            "sword-shield": 4,
+            "ultra-sun-ultra-moon": 5,
+            "sun-moon": 6,
+            "omega-ruby-alpha-sapphire": 7,
+            "x-y": 8,
+            "black-2-white-2": 9,
+            "black-white": 10,
+            "heartgold-soulsilver": 11,
+            platinum: 12,
+            "diamond-pearl": 13,
+            emerald: 14,
+            "firered-leafgreen": 15,
+            "ruby-sapphire": 16,
+            crystal: 17,
+            "gold-silver": 18,
+            yellow: 19,
+            "red-blue": 20,
+          };
+          return (versionOrder[a] || 99) - (versionOrder[b] || 99);
+        });
+
+        const currentVersion = selectedVersion || versionGroups[0] || "";
+
+        //filter moves based on selected version
+        const filteredMoves =
+          moves?.filter((move) =>
+            move.version_group_details.some(
+              (detail) => detail.version_group.name === currentVersion
+            )
+          ) || [];
+
         return (
           <div className="pokedex-content">
             <div className="info-section">
-              <h3 className="section-title">Moves</h3>
-              <div className="moves-container">
-                {moves
-                  ?.sort((a, b) => {
-                    const methodPriority = {
-                      "level-up": 1,
-                      egg: 2,
-                      tutor: 3,
-                    };
-                    const methodA =
-                      a.version_group_details[0]?.move_learn_method?.name || "";
-                    const methodB =
-                      b.version_group_details[0]?.move_learn_method?.name || "";
+              <h3 className="section-title">Game Version:</h3>
 
-                    const priorityA = methodPriority[methodA] ?? 99; // others get lowest priority
-                    const priorityB = methodPriority[methodB] ?? 99;
+              {/*pick game*/}
+              <div className="version-buttons">
+                {versionGroups.map((version) => (
+                  <button
+                    key={version}
+                    className={`version-button ${
+                      currentVersion === version ? "active" : ""
+                    }`}
+                    onClick={() => setSelectedVersion(version)}
+                    aria-pressed={currentVersion === version}
+                  >
+                    {ucaseFirst(version.replace(/-/g, " "))}
+                  </button>
+                ))}
+              </div>
 
-                    return priorityA - priorityB;
-                  })
-                  ?.map((move, index) => {
-                    const moveDetail = moveDetails[move.move.name];
+              {/*separate moves by learning method */}
+              {["level-up", "egg", "machine"].map((method) => {
+                const methodMoves = filteredMoves?.filter((move) => {
+                  const versionDetail = move.version_group_details.find(
+                    (d) => d.version_group.name === currentVersion
+                  );
+                  return versionDetail?.move_learn_method?.name === method;
+                });
+
+                if (!methodMoves || methodMoves.length === 0) return null;
+
+                //sort moves within each method
+                const sortedMoves = methodMoves.sort((a, b) => {
+                  const detailA = a.version_group_details.find(
+                    (d) => d.version_group.name === currentVersion
+                  );
+                  const detailB = b.version_group_details.find(
+                    (d) => d.version_group.name === currentVersion
+                  );
+
+                  //level-up moves, sort by level
+                  if (method === "level-up") {
                     return (
-                      <motion.div
-                        key={move.move.name}
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: index * 0.02 }}
-                        className="move-card"
-                      >
-                        <div className="move-header">
-                          <div className="move-name">
-                            {ucaseFirst(move.move.name.replace("-", " "))}
-                          </div>
-                          <div className="move-level">
-                            {move.version_group_details[0]?.level_learned_at >
-                              0 && (
-                              <span className="level-badge">
-                                Lv.{" "}
-                                {move.version_group_details[0].level_learned_at}
-                              </span>
-                            )}
-                            <span className="method-badge">
-                              {ucaseFirst(
-                                move.version_group_details[0]?.move_learn_method
-                                  ?.name || "unknown"
-                              )}
-                            </span>
-                          </div>
-                        </div>
-                        {moveDetail && (
-                          <div className="move-details">
-                            <div className="move-stats">
-                              {moveDetail.type && (
-                                <span
-                                  className="move-type"
-                                  style={{
-                                    backgroundColor: getTypeColor(
-                                      moveDetail.type.name
-                                    ),
-                                  }}
-                                >
-                                  {ucaseFirst(moveDetail.type.name)}
-                                </span>
-                              )}
-                              {moveDetail.damage_class && (
-                                <span className="move-category">
-                                  {ucaseFirst(moveDetail.damage_class.name)}
-                                </span>
-                              )}
-                              {moveDetail.power && (
-                                <span className="move-power">
-                                  PWR: {moveDetail.power}
-                                </span>
-                              )}
-                              {moveDetail.accuracy && (
-                                <span className="move-accuracy">
-                                  ACC: {moveDetail.accuracy}%
-                                </span>
-                              )}
-                              {moveDetail.pp && (
-                                <span className="move-pp">
-                                  PP: {moveDetail.pp}
-                                </span>
-                              )}
+                      (detailA?.level_learned_at || 0) -
+                      (detailB?.level_learned_at || 0)
+                    );
+                  }
+                  //other methods, sort alphabetically
+                  return a.move.name.localeCompare(b.move.name);
+                });
+
+                const methodTitle = {
+                  "level-up": "Level Up Moves",
+                  egg: "Egg Moves",
+                  machine: "TM/TR Moves",
+                };
+
+                return (
+                  <div key={method} className="info-section">
+                    <h3 className="section-title">{methodTitle[method]}</h3>
+                    <div className="moves-container">
+                      {sortedMoves.map((move, index) => {
+                        const moveDetail = moveDetails[move.move.name];
+                        const versionDetail = move.version_group_details.find(
+                          (d) => d.version_group.name === currentVersion
+                        );
+
+                        return (
+                          <motion.div
+                            key={move.move.name}
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: index * 0.02 }}
+                            className="move-card"
+                          >
+                            <div className="move-header">
+                              <div className="move-name">
+                                {ucaseFirst(move.move.name.replace("-", " "))}
+                              </div>
+                              <div className="move-level">
+                                {method === "level-up" &&
+                                  versionDetail?.level_learned_at >= 0 && (
+                                    <span className="level-badge">
+                                      Lv. {versionDetail.level_learned_at}
+                                    </span>
+                                  )}
+                                {/* <span className="method-badge">
+                                  {ucaseFirst(method.replace("-", " "))}
+                                </span> */}
+                              </div>
                             </div>
-                            {moveDetail.effect_entries?.[0] && (
-                              <div className="move-description">
-                                {moveDetail.effect_entries[0].short_effect}
+                            {moveDetail && (
+                              <div className="move-details">
+                                <div className="move-stats">
+                                  {moveDetail.type && (
+                                    <span
+                                      className="move-type"
+                                      style={{
+                                        backgroundColor: getTypeColor(
+                                          moveDetail.type.name
+                                        ),
+                                      }}
+                                    >
+                                      {ucaseFirst(moveDetail.type.name)}
+                                    </span>
+                                  )}
+                                  {moveDetail.damage_class && (
+                                    <span className="move-category">
+                                      {ucaseFirst(moveDetail.damage_class.name)}
+                                    </span>
+                                  )}
+                                  {moveDetail.power && (
+                                    <span className="move-power">
+                                      Power: {moveDetail.power}
+                                    </span>
+                                  )}
+                                  {moveDetail.accuracy && (
+                                    <span className="move-accuracy">
+                                      Accuracy: {moveDetail.accuracy}%
+                                    </span>
+                                  )}
+                                  {moveDetail.pp && (
+                                    <span className="move-pp">
+                                      PP: {moveDetail.pp}
+                                    </span>
+                                  )}
+                                </div>
+                                {moveDetail.effect_entries?.[0] && (
+                                  <div className="move-description">
+                                    {moveDetail.effect_entries[0].short_effect}
+                                  </div>
+                                )}
                               </div>
                             )}
-                          </div>
-                        )}
-                      </motion.div>
-                    );
-                  })}
-              </div>
+                          </motion.div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         );
@@ -786,7 +895,7 @@ const ModernPokedexPopup = ({ pokemon, onClose }) => {
                     <div key={index} className="location-item">
                       <div className="location-name">
                         {ucaseFirst(
-                          location.location_area.name.replace("-", " ")
+                          location.location_area.name.replace(/-/g, " ")
                         )}
                       </div>
                       <div className="location-details">
@@ -884,14 +993,14 @@ const ModernPokedexPopup = ({ pokemon, onClose }) => {
         className="modern-pokedex"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Pokédex indicator lights */}
+        {/*decor lights */}
         <div className="indicator-lights">
           <div className="indicator-light red"></div>
           <div className="indicator-light yellow"></div>
           <div className="indicator-light green"></div>
         </div>
 
-        {/* Header */}
+        {/*pokedex top*/}
         <div className="pokedex-header">
           <button onClick={onClose} className="close-button">
             ×
@@ -926,8 +1035,8 @@ const ModernPokedexPopup = ({ pokemon, onClose }) => {
                     }}
                     src={
                       shinyMode
-                        ? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/${id}.png`
-                        : `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`
+                        ? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/shiny/${id}.png`
+                        : `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`
                     }
                     alt={name}
                     className="pokemon-main-image"
@@ -983,29 +1092,29 @@ const ModernPokedexPopup = ({ pokemon, onClose }) => {
               <div className="pokemon-quick-stats">
                 <div className="quick-stat">
                   <span className="stat-label">Height</span>
-                  <span className="stat-value">{height / 10}m</span>
+                  <span className="stat-value-quick">{height / 10}m</span>
                 </div>
                 <div className="quick-stat">
                   <span className="stat-label">Weight</span>
-                  <span className="stat-value">{weight / 10}kg</span>
+                  <span className="stat-value-quick">{weight / 10}kg</span>
                 </div>
                 <div className="quick-stat">
                   <span className="stat-label">BST</span>
-                  <span className="stat-value">{baseStatTotal}</span>
+                  <span className="stat-value-quick">{baseStatTotal}</span>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Navigation Controls */}
+        {/*prev next buttons*/}
         <div className="navigation-controls">
           <button
             onClick={prevPokemon}
             disabled={id <= 1 || loading}
             className="nav-button prev"
           >
-            ← Previous
+            Previous
           </button>
 
           <div className="pokemon-counter">{id} / 1025</div>
@@ -1015,11 +1124,11 @@ const ModernPokedexPopup = ({ pokemon, onClose }) => {
             disabled={id >= 1025 || loading}
             className="nav-button next"
           >
-            Next →
+            Next
           </button>
         </div>
 
-        {/* Tab Navigation */}
+        {/*sub section tabs*/}
         <div className="tab-navigation">
           {tabs.map((tab) => (
             <button
@@ -1034,7 +1143,7 @@ const ModernPokedexPopup = ({ pokemon, onClose }) => {
           ))}
         </div>
 
-        {/* Content Area */}
+        {/*tab content*/}
         <div className="pokedex-body">
           <AnimatePresence mode="wait">
             <motion.div
@@ -1051,17 +1160,21 @@ const ModernPokedexPopup = ({ pokemon, onClose }) => {
                   <p>Loading Pokémon data...</p>
                 </div>
               ) : (
-                renderTabContent()
+                renderTabContent(activeTab, selectedVersion, setSelectedVersion)
               )}
             </motion.div>
           </AnimatePresence>
         </div>
 
-        {/* Footer with Pokédex branding */}
+        {/*footer to avoid getting sued randomly*/}
         <div className="pokedex-footer">
           <div className="pokedex-brand">
             <span className="brand-text">PokéDex</span>
-            <span className="brand-version">This is a personal project</span>
+            <span className="brand-version">
+              This is a personal project and is not affiliated with "The Pokémon
+              Company" and does not own or claim any rights to any Nintendo
+              trademark or the Pokémon trademark.
+            </span>
           </div>
           {/* <div className="footer-controls">
             <div className="volume-control">
@@ -1080,14 +1193,14 @@ const ModernPokedexPopup = ({ pokemon, onClose }) => {
           </div> */}
         </div>
 
-        {/* Pokédex Screen Effects */}
+        {/*screen scan effect line*/}
         <div className="screen-effects">
           <div className="scan-line"></div>
           <div className="screen-glare"></div>
         </div>
 
-        {/* Side Panel Indicators */}
-        <div className="side-panel left">
+        {/*side panel*/}
+        {/* <div className="side-panel left">
           <div className="panel-lights">
             <div className="panel-light blue active"></div>
             <div className="panel-light blue"></div>
@@ -1097,7 +1210,7 @@ const ModernPokedexPopup = ({ pokemon, onClose }) => {
             <button className="panel-btn small red"></button>
             <button className="panel-btn small yellow"></button>
           </div>
-        </div>
+        </div> */}
 
         {/* <div className="side-panel right">
           <div className="panel-screen">
@@ -1152,7 +1265,7 @@ const ModernPokedexPopup = ({ pokemon, onClose }) => {
           </div>
         </div> */}
 
-        {/* D-Pad and Action Buttons */}
+        {/*controller to be added later properly*/}
         {/* <div className="control-pad">
           <div className="d-pad">
             <button className="d-btn up">▲</button>
@@ -1167,7 +1280,7 @@ const ModernPokedexPopup = ({ pokemon, onClose }) => {
           </div>
         </div> */}
 
-        {/* Loading Overlay */}
+        {/*loading*/}
         {loading && (
           <motion.div
             initial={{ opacity: 0 }}
