@@ -985,6 +985,32 @@ const ModernPokedexPopup = ({ pokemon, onClose }) => {
       className="popup-overlay"
       onClick={onClose}
     >
+      {/*loading*/}
+      {loading && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="loading-overlay"
+        >
+          <div className="loading-content">
+            <div className="pokeball-loader">
+              <div className="pokeball">
+                <div className="pokeball-top"></div>
+                <div className="pokeball-middle"></div>
+                <div className="pokeball-bottom"></div>
+                <div className="pokeball-center"></div>
+              </div>
+            </div>
+            <p className="loading-text">Searching for Pokémon...</p>
+            <div className="loading-dots">
+              <span>.</span>
+              <span>.</span>
+              <span>.</span>
+            </div>
+          </div>
+        </motion.div>
+      )}
       <motion.div
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
@@ -1279,33 +1305,6 @@ const ModernPokedexPopup = ({ pokemon, onClose }) => {
             <button className="action-btn b">B</button>
           </div>
         </div> */}
-
-        {/*loading*/}
-        {loading && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="loading-overlay"
-          >
-            <div className="loading-content">
-              <div className="pokeball-loader">
-                <div className="pokeball">
-                  <div className="pokeball-top"></div>
-                  <div className="pokeball-middle"></div>
-                  <div className="pokeball-bottom"></div>
-                  <div className="pokeball-center"></div>
-                </div>
-              </div>
-              <p className="loading-text">Searching for Pokémon...</p>
-              <div className="loading-dots">
-                <span>.</span>
-                <span>.</span>
-                <span>.</span>
-              </div>
-            </div>
-          </motion.div>
-        )}
       </motion.div>
     </motion.div>
   );
