@@ -35,9 +35,20 @@ Here's an example of what the detailed view looks like:
 - PokéAPI - https://pokeapi.co/docs/v2
 - Framer Motion
 
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+
+## 🔗 Links
+
+- 🌐 [Website](https://pokedex-react-app-one.vercel.app/)
+- 💻 [GitHub Repository](https://github.com/rahul-269/pokedex-react-app)
+
+
 ## 🚧 Notes
 
-- This is a **personal project** built for fun and learning.
+- This is a **personal project** built for fun and learning, and **does not own or claim** any rights to any **Nintendo** trademark or the **Pokémon** trademark.
 - Not affiliated with or endorsed by **The Pokémon Company**, **Nintendo**, or **Game Freak**.
 - All Pokémon content, sprites, names, and trademarks belong to their respective owners.
 
