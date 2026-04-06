@@ -18,7 +18,7 @@ const ModernPokedexPopup = ({ pokemon, onClose }) => {
   // console.log(moveDetails)
   const [selectedVersion, setSelectedVersion] = useState("");
 
-  const { image, name, type, abilities, moves, id, height, weight, stats } =
+  const { name, type, abilities, moves, id, height, weight, stats } =
     pokeman;
 
   // console.log(moves);
@@ -170,14 +170,14 @@ const ModernPokedexPopup = ({ pokemon, onClose }) => {
     return Math.min((value / 255) * 100, 100);
   };
 
-  const getStatRank = (statName, value) => {
-    if (value >= 150) return "Excellent";
-    if (value >= 120) return "Very Good";
-    if (value >= 90) return "Good";
-    if (value >= 60) return "Average";
-    if (value >= 40) return "Below Average";
-    return "Poor";
-  };
+  // const getStatRank = (statName, value) => {
+  //   if (value >= 150) return "Excellent";
+  //   if (value >= 120) return "Very Good";
+  //   if (value >= 90) return "Good";
+  //   if (value >= 60) return "Average";
+  //   if (value >= 40) return "Below Average";
+  //   return "Poor";
+  // };
 
   const baseStatTotal = stats.reduce((total, stat) => total + stat.value, 0);
 
